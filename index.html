@@ -783,10 +783,16 @@
             <div class="suggestions-container" style="margin-top:15px; border-top:1px dashed #ccc; padding-top:10px;">
               <div class="suggestion-title">Câu hỏi tiếp theo phù hợp mức ${knowledgeBase[currentLevelKey].label}</div>
               ${suggestionsHTML}
+              <button class="btn-test-action" data-start-quiz="${currentLevelKey}">
+                📝 Làm bài Test trắc nghiệm mức ${knowledgeBase[currentLevelKey].label}
+              </button>
             </div>` : ''}
         `;
         loadingDiv.querySelectorAll('[data-question]').forEach(button => {
           button.addEventListener('click', () => askQuestion(button.dataset.question));
+        });
+        loadingDiv.querySelectorAll('[data-start-quiz]').forEach(button => {
+          button.addEventListener('click', () => startQuiz(button.dataset.startQuiz));
         });
         document.getElementById('current-status-display').innerText =
           `Trạng thái: ${data.model || 'AI'} · ${data.status}`;
