@@ -4,5 +4,4 @@ node_modules/
 __pycache__/
 *.py[cod]
 data/vlearn-pack/processed/
-index.private.html
 eval/private-results/
