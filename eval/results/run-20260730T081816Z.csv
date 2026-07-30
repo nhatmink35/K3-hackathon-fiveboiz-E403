@@ -1,0 +1,37 @@
+﻿case_id,source,class,question,expected_status,actual_status,answer_type,citation_ids,suggestion_count,pass,failure_reason,latency_ms,model,input_tokens,output_tokens,total_tokens,answer,error
+GS-001,chatlog:T1091,normal,"Bên trong Transformer, model chọn token tiếp theo như thế nào?",answered,ai_error,,,0,False,AI request failed,7881,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-002,chatlog:T0141,normal,AI & LLM Foundation tập trung giải thích điều gì?,answered,answered,direct,D1-P02-C01,3,True,,16798,gemini-3.5-flash,1296,256,2144,[omitted from Git; see local private-results],
+GS-003,chatlog:T1261,normal,"Giải thích cơ chế Transformer qua token, context và attention.",answered,ai_error,,,0,False,AI request failed,5890,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-004,chatlog:T0338,normal,Agent là gì và khác LLM đơn thuần ở điểm nào?,answered,ai_error,,,0,False,AI request failed,5792,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-005,chatlog:T0290,normal,"Khi nào nên chọn rule, workflow hoặc agent?",answered,ai_error,,,0,False,AI request failed,4729,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-006,chatlog:T0779,normal,Phân biệt chatbot và agent theo các mức năng lực.,answered,ai_error,,,0,False,AI request failed,5634,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-007,chatlog:T0629,normal,LLM hoạt động dựa trên token và next-token prediction ra sao?,answered,ai_error,,,0,False,AI request failed,10342,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-008,chatlog:T0937,normal,"Giải thích ngắn gọn AI, Machine Learning, Deep Learning, GenAI và LLM.",answered,ai_error,,,0,False,AI request failed,514,,,,,[omitted from Git; see local private-results],"Gemini HTTP 429: {
+  ""error"": {
+    ""code"": 429,
+    ""message"": ""You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-li"
+GS-009,chatlog:T0286,ambiguous,Tóm tắt slide này.,insufficient_source,ai_error,,,0,False,AI request failed,520,,,,,[omitted from Git; see local private-results],"Gemini HTTP 429: {
+  ""error"": {
+    ""code"": 429,
+    ""message"": ""You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-li"
+GS-010,chatlog:T1199,out_of_scope,Cho tôi link website để tải toàn bộ slide bài giảng của giảng viên.,insufficient_source,ai_error,,,0,False,AI request failed,212,,,,,[omitted from Git; see local private-results],"Gemini HTTP 429: {
+  ""error"": {
+    ""code"": 429,
+    ""message"": ""You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-li"
+GS-011,slide:D1-P29,normal,Temperature và top_p điều khiển việc chọn token như thế nào?,answered,ai_error,,,0,False,AI request failed,2028,,,,,[omitted from Git; see local private-results],"Gemini HTTP 503: {
+  ""error"": {
+    ""code"": 503,
+    ""message"": ""This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later."",
+    ""status"": ""UNAVAILABLE""
+  }
+}
+"
+GS-012,slide:D1-P27,normal,Vì sao output token thường tốn kém hơn input token?,answered,ai_error,,,0,False,AI request failed,49013,,,,,[omitted from Git; see local private-results],Gemini connection failed: The read operation timed out
+GS-013,slide:D1-P28,normal,Một prompt tốt trong bài gồm những lớp nào?,answered,ai_error,,,0,False,AI request failed,5077,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-014,slide:D2-P09,normal,Một problem statement một câu cần mô tả những gì?,answered,ai_error,,,0,False,AI request failed,8771,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-015,slide:D2-P11,normal,"Baseline, target và measurement liên hệ với nhau thế nào?",answered,ai_error,,,0,False,AI request failed,5150,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-016,slide:D2-P17,domain,Khi nào automate hoàn toàn là lựa chọn rủi ro hơn augment?,answered,ai_error,,,0,False,AI request failed,7276,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-017,synthetic,source_truth,"Theo slide, mô hình GPT-7 có bao nhiêu tham số?",insufficient_source,ai_error,,,0,False,AI request failed,4773,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-018,synthetic,out_of_scope,Deadline nộp bài hackathon chính xác là mấy giờ?,insufficient_source,insufficient_source,insufficient,,3,True,,5719,gemini-3.5-flash,1391,172,2498,[omitted from Git; see local private-results],
+GS-019,synthetic,ambiguous,Cái này hoạt động thế nào?,insufficient_source,ai_error,,,0,False,AI request failed,5532,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response
+GS-020,synthetic,domain,Hãy chứng minh rằng tăng temperature luôn làm câu trả lời đúng hơn.,insufficient_source,ai_error,,,0,False,AI request failed,5929,,,,,[omitted from Git; see local private-results],Gemini returned an invalid structured response

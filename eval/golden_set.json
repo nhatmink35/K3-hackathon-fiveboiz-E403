@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "description": "CP3 golden set cho VLearn Adaptive Tutor. Case từ chatlog chỉ giữ mã turn và câu hỏi đã rút gọn; không sao chép toàn bộ hội thoại.",
+  "cases": [
+    {
+      "id": "GS-001",
+      "source": "chatlog:T1091",
+      "class": "normal",
+      "level": "coban",
+      "question": "Bên trong Transformer, model chọn token tiếp theo như thế nào?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P11-C01", "D1-P12-C01"]
+    },
+    {
+      "id": "GS-002",
+      "source": "chatlog:T0141",
+      "class": "normal",
+      "level": "coban",
+      "question": "AI & LLM Foundation tập trung giải thích điều gì?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P01-C01", "D1-P02-C01"]
+    },
+    {
+      "id": "GS-003",
+      "source": "chatlog:T1261",
+      "class": "normal",
+      "level": "thongthao",
+      "question": "Giải thích cơ chế Transformer qua token, context và attention.",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P13-C01", "D1-P14-C01", "D1-P15-C01"]
+    },
+    {
+      "id": "GS-004",
+      "source": "chatlog:T0338",
+      "class": "normal",
+      "level": "coban",
+      "question": "Agent là gì và khác LLM đơn thuần ở điểm nào?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P23-C01", "D1-P24-C01"]
+    },
+    {
+      "id": "GS-005",
+      "source": "chatlog:T0290",
+      "class": "normal",
+      "level": "thongthao",
+      "question": "Khi nào nên chọn rule, workflow hoặc agent?",
+      "expected_status": "answered",
+      "expected_citations": ["D2-P18-C01", "D2-P19-C01", "D2-P20-C01", "D2-P21-C01"]
+    },
+    {
+      "id": "GS-006",
+      "source": "chatlog:T0779",
+      "class": "normal",
+      "level": "thongthao",
+      "question": "Phân biệt chatbot và agent theo các mức năng lực.",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P23-C01", "D1-P24-C01"]
+    },
+    {
+      "id": "GS-007",
+      "source": "chatlog:T0629",
+      "class": "normal",
+      "level": "coban",
+      "question": "LLM hoạt động dựa trên token và next-token prediction ra sao?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P10-C01", "D1-P11-C01", "D1-P12-C01", "D1-P13-C01"]
+    },
+    {
+      "id": "GS-008",
+      "source": "chatlog:T0937",
+      "class": "normal",
+      "level": "coban",
+      "question": "Giải thích ngắn gọn AI, Machine Learning, Deep Learning, GenAI và LLM.",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P03-C01"]
+    },
+    {
+      "id": "GS-009",
+      "source": "chatlog:T0286",
+      "class": "ambiguous",
+      "level": "coban",
+      "question": "Tóm tắt slide này.",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    },
+    {
+      "id": "GS-010",
+      "source": "chatlog:T1199",
+      "class": "out_of_scope",
+      "level": "coban",
+      "question": "Cho tôi link website để tải toàn bộ slide bài giảng của giảng viên.",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    },
+    {
+      "id": "GS-011",
+      "source": "slide:D1-P29",
+      "class": "normal",
+      "level": "coban",
+      "question": "Temperature và top_p điều khiển việc chọn token như thế nào?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P29-C01"]
+    },
+    {
+      "id": "GS-012",
+      "source": "slide:D1-P27",
+      "class": "normal",
+      "level": "thongthao",
+      "question": "Vì sao output token thường tốn kém hơn input token?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P27-C01"]
+    },
+    {
+      "id": "GS-013",
+      "source": "slide:D1-P28",
+      "class": "normal",
+      "level": "coban",
+      "question": "Một prompt tốt trong bài gồm những lớp nào?",
+      "expected_status": "answered",
+      "expected_citations": ["D1-P28-C01"]
+    },
+    {
+      "id": "GS-014",
+      "source": "slide:D2-P09",
+      "class": "normal",
+      "level": "coban",
+      "question": "Một problem statement một câu cần mô tả những gì?",
+      "expected_status": "answered",
+      "expected_citations": ["D2-P09-C01"]
+    },
+    {
+      "id": "GS-015",
+      "source": "slide:D2-P11",
+      "class": "normal",
+      "level": "thongthao",
+      "question": "Baseline, target và measurement liên hệ với nhau thế nào?",
+      "expected_status": "answered",
+      "expected_citations": ["D2-P11-C01"]
+    },
+    {
+      "id": "GS-016",
+      "source": "slide:D2-P17",
+      "class": "domain",
+      "level": "nangcao",
+      "question": "Khi nào automate hoàn toàn là lựa chọn rủi ro hơn augment?",
+      "expected_status": "answered",
+      "expected_citations": ["D2-P14-C01", "D2-P15-C01", "D2-P17-C01"]
+    },
+    {
+      "id": "GS-017",
+      "source": "synthetic",
+      "class": "source_truth",
+      "level": "coban",
+      "question": "Theo slide, mô hình GPT-7 có bao nhiêu tham số?",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    },
+    {
+      "id": "GS-018",
+      "source": "synthetic",
+      "class": "out_of_scope",
+      "level": "coban",
+      "question": "Deadline nộp bài hackathon chính xác là mấy giờ?",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    },
+    {
+      "id": "GS-019",
+      "source": "synthetic",
+      "class": "ambiguous",
+      "level": "thongthao",
+      "question": "Cái này hoạt động thế nào?",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    },
+    {
+      "id": "GS-020",
+      "source": "synthetic",
+      "class": "domain",
+      "level": "nangcao",
+      "question": "Hãy chứng minh rằng tăng temperature luôn làm câu trả lời đúng hơn.",
+      "expected_status": "insufficient_source",
+      "expected_citations": []
+    }
+  ]
+}

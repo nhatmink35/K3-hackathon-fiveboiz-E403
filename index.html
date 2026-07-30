@@ -368,52 +368,13 @@
     <!-- KHU VỰC 1: SLIDE BÀI HỌC (3 SLIDE CÓ THỂ CUỘN - KHÔNG CÓ TIÊU ĐỀ) -->
     <div class="doc-section">
       <div class="slides-container" id="slides-container">
-        <!-- Slide 1 -->
-        <div class="slide-card" id="slide-1">
+        <div class="slide-card">
           <div class="slide-header">
-            <span>Bài 4: Học có giám sát (Supervised Learning)</span>
-            <span class="slide-number">Slide 1 / 3</span>
+            <span>Đang tải nội dung bài học...</span>
+            <span class="slide-number">VLearn</span>
           </div>
           <div class="slide-content">
-            <p><b>Định nghĩa cốt lõi:</b></p>
-            <p>Học có giám sát là thuật toán học từ tập dữ liệu gán nhãn (labeled data) nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.</p>
-            <ul>
-              <li><b>Dữ liệu đầu vào (X):</b> Các đặc trưng (Features) thu thập được.</li>
-              <li><b>Nhãn đầu ra (Y):</b> Kết quả thực tế tương ứng (Label / Target).</li>
-              <li><b>Mục tiêu:</b> Tìm ra hàm ánh xạ tối ưu <i>f(X) → Y</i>.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="slide-card" id="slide-2">
-          <div class="slide-header">
-            <span>Hồi quy tuyến tính (Linear Regression)</span>
-            <span class="slide-number">Slide 2 / 3</span>
-          </div>
-          <div class="slide-content">
-            <p><b>Mô hình hóa dữ liệu:</b></p>
-            <p>Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa biến phụ thuộc Y và một hay nhiều biến độc lập X thông qua một đường thẳng.</p>
-            <ul>
-              <li><b>Phương trình đơn giản:</b> <i>Y = w·X + b</i></li>
-              <li>Trong đó <b>w (weight)</b> là trọng số quyết định độ dốc đường thẳng.</li>
-              <li><b>b (bias)</b> là hệ số tự do (điểm cắt trục tung).</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="slide-card" id="slide-3">
-          <div class="slide-header">
-            <span>Hàm mất mát & Thuật toán Tối ưu hóa</span>
-            <span class="slide-number">Slide 3 / 3</span>
-          </div>
-          <div class="slide-content">
-            <p><b>Làm sao để mô hình tự học chính xác hơn?</b></p>
-            <ul>
-              <li><b>Hàm mất mát (Loss Function - MSE):</b> Sử dụng Mean Squared Error để đo lường trung bình bình phương sai số giữa giá trị dự đoán của mô hình và thực tế.</li>
-              <li><b>Tối ưu hóa (Gradient Descent):</b> Thuật toán lặp tự động điều chỉnh và cập nhật trọng số (weights) theo hướng giảm dần sai số, nhằm cực tiểu hóa hàm MSE.</li>
-            </ul>
+            <p>Slide được tải cục bộ từ backend để không đưa data pack riêng tư vào Git.</p>
           </div>
         </div>
       </div>
@@ -441,105 +402,153 @@
   </div>
 
   <script>
+    const API_BASE_URL = 'http://127.0.0.1:8000';
+    let tutorSessionId = null;
+    let currentLevelKey = 'coban';
+
     // Dữ liệu câu hỏi, câu trả lời, và ngân hàng câu hỏi test theo từng mức độ
     const knowledgeBase = {
       coban: {
         badgeClass: "badge-coban",
         label: "Cơ bản",
         questions: [
-          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?",
-          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?",
-          "MSE là viết tắt của từ gì và dùng để làm gì?"
+          "AI, Machine Learning, Deep Learning, GenAI và LLM khác nhau thế nào?",
+          "Token là gì và vì sao model không đọc nguyên từng từ?",
+          "Một problem statement một câu cần mô tả những gì?"
         ],
-        answers: {
-          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?":
-            "<b>[Căn cứ Slide 1]</b> Học có giám sát là thuật toán học từ <b>tập dữ liệu gán nhãn (labeled data)</b> nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.",
-          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?":
-            "<b>[Căn cứ Slide 2]</b> Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa <b>biến phụ thuộc Y</b> và một hay nhiều <b>biến độc lập X</b> thông qua một đường thẳng.",
-          "MSE là viết tắt của từ gì và dùng để làm gì?":
-            "<b>[Căn cứ Slide 3]</b> MSE là viết tắt của <b>Mean Squared Error</b> (Trung bình bình phương sai số). Nó được dùng làm hàm mất mát (Loss Function) để đo lường sai số giữa giá trị dự đoán của mô hình và giá trị thực tế."
-        },
+        answers: {},
         test: {
-          question: "Đặc điểm bắt buộc của tập dữ liệu đầu vào trong thuật toán 'Học có giám sát (Supervised Learning)' là gì?",
+          question: "Theo bài Day 1, LLM nằm ở đâu trong hệ các khái niệm AI?",
           options: [
-            "A. Chỉ chứa các biến số (Features) mà không cần nhãn",
-            "B. Phải là tập dữ liệu đã gán nhãn (labeled data)",
-            "C. Phải có phân phối dạng đường thẳng tuyến tính",
-            "D. Không cần dữ liệu đầu vào, mô hình tự sinh ra"
+            "A. LLM là chiếc ô lớn nhất bao trùm toàn bộ AI",
+            "B. LLM là model nền chuyên ngôn ngữ thuộc Generative AI",
+            "C. LLM hoàn toàn không liên quan đến Deep Learning",
+            "D. LLM chỉ là một tên gọi khác của chatbot"
           ],
-          correctIndex: 1, // B
-          slideTarget: "slide-1",
-          slideName: "Slide 1 / 3: Học có giám sát (Supervised Learning)",
-          feedbackWrong: "Bạn đang nhầm lẫn giữa dữ liệu gán nhãn và dữ liệu chưa gán nhãn. Điểm khác biệt lớn nhất của Học có giám sát so với các phương pháp khác là tập dữ liệu huấn luyện luôn phải đi kèm với kết quả mong muốn (nhãn Y)."
+          correctIndex: 1,
+          slideTarget: "slide-D1-3",
+          slideName: "Day 1 · Trang 3: Bức tranh AI, ML, Deep Learning, GenAI và LLM",
+          feedbackWrong: "LLM là model nền chuyên ngôn ngữ trong hệ Generative AI; chatbot chỉ là một dạng sản phẩm được đóng gói quanh model nền."
         }
       },
       thongthao: {
         badgeClass: "badge-thongthao",
         label: "Thông thạo",
         questions: [
-          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?",
-          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?",
-          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?"
+          "Context và attention giữ vai trò gì khi LLM xử lý câu hỏi?",
+          "Từ LLM đến agent có những mức năng lực nào?",
+          "Baseline, target và measurement liên hệ với nhau thế nào?"
         ],
-        answers: {
-          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?":
-            "<b>[Căn cứ Slide 3]</b> Hàm mất mát (MSE) đóng vai trò <b>đo lường độ sai lệch</b>, trong khi Gradient Descent đóng vai trò là <b>thuật toán tối ưu hóa</b>. Gradient Descent sẽ dựa vào giá trị MSE để tìm hướng giảm sai số xuống mức thấp nhất.",
-          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?":
-            "<b>[Căn cứ Slide 3]</b> Bạn cần nhìn vào giá trị của hàm mất mát <b>MSE</b>. Giá trị MSE càng nhỏ chứng tỏ đường thẳng dự đoán càng sát với dữ liệu thực tế (dự đoán tốt) và ngược lại.",
-          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?":
-            "<b>[Căn cứ Slide 2 & 3]</b> Trọng số w (weights) quyết định độ dốc của đường thẳng. Việc cập nhật trọng số liên tục giúp đường thẳng dịch chuyển dần đến vị trí khớp nhất với dữ liệu, nhằm <b>cực tiểu hóa hàm MSE</b>."
-        },
+        answers: {},
         test: {
-          question: "Trong phương trình Hồi quy tuyến tính Y = w·X + b, vai trò chính của trọng số 'w (weight)' và việc cập nhật 'w' là gì?",
+          question: "Điểm khác biệt cốt lõi khi chuyển từ LLM sang agent là gì?",
           options: [
-            "A. w quyết định độ dốc đường thẳng, cập nhật w để cực tiểu hóa hàm MSE",
-            "B. w là điểm cắt trục tung, cập nhật w để tăng hàm MSE lên tối đa",
-            "C. w là số lượng nhãn dữ liệu, không thể thay đổi trong quá trình học",
-            "D. w là sai số dự đoán, cập nhật w để biến đường thẳng thành đường cong"
+            "A. Agent chỉ đổi màu giao diện của chatbot",
+            "B. Agent thêm khả năng dùng công cụ, nhớ trạng thái và lặp để đạt mục tiêu",
+            "C. Agent không cần model ngôn ngữ",
+            "D. Agent luôn chính xác và không cần kiểm soát"
           ],
-          correctIndex: 0, // A
-          slideTarget: "slide-2",
-          slideName: "Slide 2 / 3: Hồi quy tuyến tính (Linear Regression)",
-          feedbackWrong: "Bạn cần lưu ý: w (weight) là trọng số quyết định độ dốc của đường thẳng dự đoán. Mục tiêu của quá trình tối ưu hóa (Gradient Descent) là liên tục điều chỉnh w sao cho sai số MSE đạt giá trị nhỏ nhất."
+          correctIndex: 1,
+          slideTarget: "slide-D1-23",
+          slideName: "Day 1 · Trang 23: Từ LLM đến agent",
+          feedbackWrong: "Agent bổ sung năng lực hành động, công cụ, trạng thái và vòng lặp; điều đó không đồng nghĩa agent luôn đúng."
         }
       },
       nangcao: {
         badgeClass: "badge-nangcao",
         label: "Nâng cao",
         questions: [
-          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?",
-          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?",
-          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?"
+          "Khi nào automate hoàn toàn rủi ro hơn augment?",
+          "Vì sao nên chọn model theo tầng thay vì chỉ nhìn tên model?",
+          "Temperature và top_p tạo ra những đánh đổi nào?"
         ],
-        answers: {
-          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?":
-            "<b>[Suy luận từ Slide 2]</b> Vì Hồi quy tuyến tính chỉ mô hình hóa bằng <b>một đường thẳng (quan hệ tuyến tính)</b>, nên nó sẽ hoạt động rất kém nếu dữ liệu thực tế có phân phối phi tuyến tính (cạnh cong, parabol, hoặc dữ liệu phân tán phức tạp).",
-          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?":
-            "<b>[Suy luận từ Slide 1]</b> <b>Không thể dùng được.</b> Điều kiện tiên quyết của Học có giám sát là bắt buộc phải có tập dữ liệu đã gán nhãn (labeled data) để làm chuẩn cho mô hình học.",
-          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?":
-            "<b>[Kiến thức mở rộng theo Slide 3]</b> Khi đó mô hình sẽ bị hiện tượng <b>không hội tụ (non-convergence)</b> hoặc kẹt ở cực tiểu cục bộ/lặp vô tận, dẫn đến việc dự đoán đầu ra cho dữ liệu mới có sai số rất lớn."
-        },
+        answers: {},
         test: {
-          question: "Tại sao thuật toán Gradient Descent cần lặp lại nhiều lần để điều chỉnh trọng số thay vì tính toán một lần duy nhất?",
+          question: "Khi sai sót có hậu quả cao và cần con người kiểm tra, mức automation phù hợp nhất là gì?",
           options: [
-            "A. Vì hàm mất mát MSE luôn có giá trị bằng 0 ở mọi thời điểm",
-            "B. Vì Gradient Descent là thuật toán lặp, tìm hướng dốc xuống để hội tụ dần về cực tiểu MSE",
-            "C. Vì tập dữ liệu Supervised Learning không bao giờ có nhãn đầu ra",
-            "D. Vì Hồi quy tuyến tính không dùng đường thẳng mà dùng phương trình đa thức"
+            "A. Automate hoàn toàn mọi trường hợp",
+            "B. Augment hoặc conditional automation với điểm kiểm soát của con người",
+            "C. Luôn dùng agent tự chủ nhiều bước",
+            "D. Bỏ toàn bộ bước đo lường"
           ],
-          correctIndex: 1, // B
-          slideTarget: "slide-3",
-          slideName: "Slide 3 / 3: Hàm mất mát & Thuật toán Tối ưu hóa",
-          feedbackWrong: "Ở mức độ Nâng cao, bạn cần nắm rõ bản chất cơ chế lặp của Gradient Descent: do không thể biết ngay điểm đáy của hàm mất mát trong không gian nhiều chiều, thuật toán phải lặp từng bước nhỏ theo đạo hàm (độ dốc) để tìm điểm sai số cực tiểu."
+          correctIndex: 1,
+          slideTarget: "slide-D2-17",
+          slideName: "Day 2 · Trang 17: Automate và Augment",
+          feedbackWrong: "Khi cost-of-error cao, nên giữ quyền quyết định hoặc điểm kiểm soát cho con người thay vì tự động hóa hoàn toàn."
         }
       }
     };
 
     let isMinimized = false;
 
-    window.onload = function() {
+    window.onload = async function() {
       initChatTutor();
+      await Promise.all([initBackendSession(), loadSlidesFromBackend()]);
     };
+
+    async function loadSlidesFromBackend() {
+      const container = document.getElementById('slides-container');
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/slides`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        container.innerHTML = '';
+        data.slides.forEach(slide => {
+          const card = document.createElement('div');
+          card.className = 'slide-card';
+          card.id = `slide-${slide.document_id}-${slide.page}`;
+
+          const header = document.createElement('div');
+          header.className = 'slide-header';
+          const title = document.createElement('span');
+          title.textContent = slide.page_title;
+          const number = document.createElement('span');
+          number.className = 'slide-number';
+          number.textContent = `${slide.citation} · ${slide.document_title}`;
+          header.append(title, number);
+
+          const content = document.createElement('div');
+          content.className = 'slide-content';
+          String(slide.content).split('\n').filter(Boolean).forEach(line => {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = line;
+            content.appendChild(paragraph);
+          });
+          card.append(header, content);
+          container.appendChild(card);
+        });
+      } catch (error) {
+        container.innerHTML = `
+          <div class="slide-card">
+            <div class="slide-header">
+              <span>Không tải được slide</span>
+              <span class="slide-number">Backend offline</span>
+            </div>
+            <div class="slide-content">
+              <p>Hãy chạy backend và tải lại trang. Chi tiết: ${escapeHTML(error.message)}</p>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    async function initBackendSession() {
+      const status = document.getElementById('current-status-display');
+      status.innerText = 'Trạng thái: Đang kết nối AI...';
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/sessions`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({initial_level: currentLevelKey})
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        tutorSessionId = data.session.session_id;
+        status.innerText = 'Trạng thái: AI sẵn sàng';
+      } catch (error) {
+        status.innerText = 'Trạng thái: Chưa kết nối backend';
+      }
+    }
 
     function initChatTutor() {
       const chatMessages = document.getElementById('chat-messages');
@@ -577,9 +586,23 @@
       }
     }
 
-    function selectLevelInChat(levelKey) {
+    async function selectLevelInChat(levelKey) {
       const levelData = knowledgeBase[levelKey];
       const chatMessages = document.getElementById('chat-messages');
+      currentLevelKey = levelKey;
+
+      if (tutorSessionId) {
+        try {
+          await fetch(`${API_BASE_URL}/api/sessions/${tutorSessionId}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({level: levelKey})
+          });
+        } catch (error) {
+          document.getElementById('current-status-display').innerText =
+            'Trạng thái: Không cập nhật được mức';
+        }
+      }
 
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
@@ -703,7 +726,7 @@
       }
     }
 
-    function askQuestion(questionText, levelKey = null) {
+    async function askQuestion(questionText, levelKey = null) {
       document.getElementById('user-input').value = '';
       const chatMessages = document.getElementById('chat-messages');
 
@@ -714,45 +737,81 @@
 
       scrollToBottom();
 
-      setTimeout(() => {
-        const botMessageDiv = document.createElement('div');
-        botMessageDiv.className = 'message bot';
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'message bot';
+      loadingDiv.innerHTML = '<span class="badge badge-tutor">AI Tutor</span><p>Đang tìm trong slide và soạn câu trả lời...</p>';
+      chatMessages.appendChild(loadingDiv);
+      scrollToBottom();
 
-        let answerText = "Mình không tìm thấy thông tin trực tiếp trong 3 Slide trên để trả lời câu hỏi này.";
-        let badgeClass = "badge-tutor";
-        let labelName = "AI Tutor";
+      if (!tutorSessionId) await initBackendSession();
+      if (!tutorSessionId) {
+        loadingDiv.innerHTML = '<span class="badge badge-test">Lỗi kết nối</span><p>Backend chưa chạy. Hãy chạy server rồi thử lại.</p>';
+        return;
+      }
 
-        if (levelKey && knowledgeBase[levelKey].answers[questionText]) {
-          answerText = knowledgeBase[levelKey].answers[questionText];
-          badgeClass = knowledgeBase[levelKey].badgeClass;
-          labelName = knowledgeBase[levelKey].label;
-        } else {
-          for (const key in knowledgeBase) {
-            if (knowledgeBase[key].answers[questionText]) {
-              answerText = knowledgeBase[key].answers[questionText];
-              badgeClass = knowledgeBase[key].badgeClass;
-              labelName = knowledgeBase[key].label;
-              break;
-            }
-          }
+      try {
+        document.getElementById('current-status-display').innerText =
+          'Trạng thái: AI đang trả lời...';
+        const response = await fetch(`${API_BASE_URL}/api/chat`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            session_id: tutorSessionId,
+            message: questionText
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error?.message || `HTTP ${response.status}`);
         }
 
-        botMessageDiv.innerHTML = `
-          <span class="badge ${badgeClass}">${labelName}</span>
-          <p>${answerText}</p>
-          <div class="suggestions-container" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-            <div class="suggestion-title">Bạn có muốn đổi mức độ khác không?</div>
-            <div>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('coban')">🌱 Cơ bản</button>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
-            </div>
-          </div>
-        `;
+        const citationsHTML = (data.citations || []).map(item =>
+          `<span class="badge badge-tutor">${escapeHTML(item.citation)} · ${escapeHTML(item.document_title)}</span>`
+        ).join(' ');
+        const suggestionsHTML = (data.suggestions || []).map(question =>
+          `<button class="btn-suggestion" data-question="${escapeAttribute(question)}">❓ ${escapeHTML(question)}</button>`
+        ).join('');
+        const answerLabel = data.answer_type === 'inference'
+          ? 'Suy luận từ nguồn'
+          : data.status === 'insufficient_source' ? 'Chưa đủ nguồn' : 'AI Tutor';
 
-        chatMessages.appendChild(botMessageDiv);
-        scrollToBottom();
-      }, 500);
+        loadingDiv.innerHTML = `
+          <span class="badge ${knowledgeBase[currentLevelKey].badgeClass}">${answerLabel}</span>
+          <p>${escapeHTML(data.answer)}</p>
+          ${citationsHTML ? `<div style="margin-top:10px;">${citationsHTML}</div>` : ''}
+          ${suggestionsHTML ? `
+            <div class="suggestions-container" style="margin-top:15px; border-top:1px dashed #ccc; padding-top:10px;">
+              <div class="suggestion-title">Câu hỏi tiếp theo phù hợp mức ${knowledgeBase[currentLevelKey].label}</div>
+              ${suggestionsHTML}
+            </div>` : ''}
+        `;
+        loadingDiv.querySelectorAll('[data-question]').forEach(button => {
+          button.addEventListener('click', () => askQuestion(button.dataset.question));
+        });
+        document.getElementById('current-status-display').innerText =
+          `Trạng thái: ${data.model || 'AI'} · ${data.status}`;
+      } catch (error) {
+        loadingDiv.innerHTML = `
+          <span class="badge badge-test">Không thể trả lời</span>
+          <p>${escapeHTML(error.message)} Bạn có thể thử lại sau.</p>
+        `;
+        document.getElementById('current-status-display').innerText =
+          'Trạng thái: AI tạm thời lỗi';
+      }
+      scrollToBottom();
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(value) {
+      return escapeHTML(value).replaceAll('`', '&#096;');
     }
 
     function sendMessage() {
