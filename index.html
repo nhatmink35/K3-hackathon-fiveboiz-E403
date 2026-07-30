@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLearn AI Tutor - Quiz & Improvement Flow</title>
+  <style>
+    :root {
+      --bg-color: #f4f7f6;
+      --primary-color: #0f766e;
+      --primary-hover: #115e59;
+      --text-color: #1f2937;
+      --border-color: #e5e7eb;
+      --chat-bg: #ffffff;
+      --bot-bg: #f0fdf4;
+      --user-bg: #0f766e;
+      --user-text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 1280px;
+      height: 92vh;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    /* Column 1: Khu vực Slide có thể cuộn - ĐÃ BỎ TIÊU ĐỀ */
+    .doc-section {
+      padding: 20px;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background-color: #fafbfc;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .slides-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding-right: 10px;
+      scroll-behavior: smooth;
+    }
+
+    .slide-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      transition: border-color 0.3s, background-color 0.3s;
+    }
+
+    .slide-card.highlight {
+      border: 2px solid #ea580c;
+      background-color: #fffaf0;
+    }
+
+    .slide-header {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--primary-color);
+      border-bottom: 2px solid #f0fdf4;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .slide-number {
+      font-size: 0.75rem;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    .slide-content {
+      font-size: 0.92rem;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .slide-content ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .slide-content li {
+      margin-bottom: 6px;
+    }
+
+    /* Column 2: Chat Section */
+    .chat-section {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      background: var(--chat-bg);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .chat-header {
+      padding: 15px 20px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .chat-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-header span {
+      font-size: 0.85rem;
+      color: #6b7280;
+      font-weight: normal;
+    }
+
+    .btn-minimize {
+      background: #f3f4f6;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .btn-minimize:hover {
+      background: #e5e7eb;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      scroll-behavior: smooth;
+    }
+
+    .message {
+      max-width: 88%;
+      padding: 14px 18px;
+      border-radius: 10px;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+      background: var(--bot-bg);
+      border: 1px solid #dcfce7;
+      border-bottom-left-radius: 2px;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      background: var(--user-bg);
+      color: var(--user-text);
+      border-bottom-right-radius: 2px;
+    }
+
+    .suggestions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .suggestion-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-top: 5px;
+    }
+
+    .btn-suggestion {
+      background: #fff;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 10px 14px;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+
+    .btn-suggestion:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .btn-test-action {
+      background: #fff7ed;
+      border: 1.5px dashed #ea580c;
+      color: #c2410c;
+      padding: 10px 14px;
+      border-radius: 8px;
+      text-align: left;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 5px;
+    }
+
+    .btn-test-action:hover {
+      background: #ea580c;
+      color: #fff;
+    }
+
+    .btn-option {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-option:hover {
+      border-color: var(--primary-color);
+      background: #f8fafc;
+    }
+
+    .btn-level-chat {
+      background: #fff;
+      border: 1.5px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-right: 8px;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .btn-level-chat:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    .chat-input-area {
+      padding: 15px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 10px;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    .chat-input-area input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .btn-send {
+      padding: 10px 20px;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-send:hover {
+      background: var(--primary-hover);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .badge-coban { background: #e0f2fe; color: #0369a1; }
+    .badge-thongthao { background: #fef3c7; color: #b45309; }
+    .badge-nangcao { background: #f3e8ff; color: #6b21a8; }
+    .badge-tutor { background: #dcfce7; color: #15803d; }
+    .badge-test { background: #ffedd5; color: #9a3412; }
+
+    /* STATE: Thu nhỏ chat bot */
+    .chat-section.minimized {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 280px;
+      height: 55px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-color);
+      z-index: 100;
+    }
+
+    .chat-section.minimized .chat-messages,
+    .chat-section.minimized .chat-input-area {
+      display: none;
+    }
+
+    .container.chat-minimized {
+      grid-template-columns: 1fr;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main-container">
+    <!-- KHU VỰC 1: SLIDE BÀI HỌC (3 SLIDE CÓ THỂ CUỘN - KHÔNG CÓ TIÊU ĐỀ) -->
+    <div class="doc-section">
+      <div class="slides-container" id="slides-container">
+        <!-- Slide 1 -->
+        <div class="slide-card" id="slide-1">
+          <div class="slide-header">
+            <span>Bài 4: Học có giám sát (Supervised Learning)</span>
+            <span class="slide-number">Slide 1 / 3</span>
+          </div>
+          <div class="slide-content">
+            <p><b>Định nghĩa cốt lõi:</b></p>
+            <p>Học có giám sát là thuật toán học từ tập dữ liệu gán nhãn (labeled data) nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.</p>
+            <ul>
+              <li><b>Dữ liệu đầu vào (X):</b> Các đặc trưng (Features) thu thập được.</li>
+              <li><b>Nhãn đầu ra (Y):</b> Kết quả thực tế tương ứng (Label / Target).</li>
+              <li><b>Mục tiêu:</b> Tìm ra hàm ánh xạ tối ưu <i>f(X) → Y</i>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide-card" id="slide-2">
+          <div class="slide-header">
+            <span>Hồi quy tuyến tính (Linear Regression)</span>
+            <span class="slide-number">Slide 2 / 3</span>
+          </div>
+          <div class="slide-content">
+            <p><b>Mô hình hóa dữ liệu:</b></p>
+            <p>Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa biến phụ thuộc Y và một hay nhiều biến độc lập X thông qua một đường thẳng.</p>
+            <ul>
+              <li><b>Phương trình đơn giản:</b> <i>Y = w·X + b</i></li>
+              <li>Trong đó <b>w (weight)</b> là trọng số quyết định độ dốc đường thẳng.</li>
+              <li><b>b (bias)</b> là hệ số tự do (điểm cắt trục tung).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide-card" id="slide-3">
+          <div class="slide-header">
+            <span>Hàm mất mát & Thuật toán Tối ưu hóa</span>
+            <span class="slide-number">Slide 3 / 3</span>
+          </div>
+          <div class="slide-content">
+            <p><b>Làm sao để mô hình tự học chính xác hơn?</b></p>
+            <ul>
+              <li><b>Hàm mất mát (Loss Function - MSE):</b> Sử dụng Mean Squared Error để đo lường trung bình bình phương sai số giữa giá trị dự đoán của mô hình và thực tế.</li>
+              <li><b>Tối ưu hóa (Gradient Descent):</b> Thuật toán lặp tự động điều chỉnh và cập nhật trọng số (weights) theo hướng giảm dần sai số, nhằm cực tiểu hóa hàm MSE.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KHU VỰC 2: KHUNG CHAT AI TUTOR -->
+    <div class="chat-section" id="chat-section">
+      <div class="chat-header">
+        <div>VLearn AI Tutor</div>
+        <div class="chat-header-actions">
+          <span id="current-status-display">Trạng thái: Sẵn sàng</span>
+          <button class="btn-minimize" id="btn-toggle-chat" onclick="toggleChat()">[-] Thu nhỏ</button>
+        </div>
+      </div>
+
+      <div class="chat-messages" id="chat-messages">
+        <!-- AI sẽ tự gởi lời chào và khảo sát mức độ ngay lúc mở trang -->
+      </div>
+
+      <div class="chat-input-area">
+        <input type="text" id="user-input" placeholder="Gõ câu hỏi của bạn tại đây..." onkeypress="handleKeyPress(event)">
+        <button class="btn-send" onclick="sendMessage()">Gửi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Dữ liệu câu hỏi, câu trả lời, và ngân hàng câu hỏi test theo từng mức độ
+    const knowledgeBase = {
+      coban: {
+        badgeClass: "badge-coban",
+        label: "Cơ bản",
+        questions: [
+          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?",
+          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?",
+          "MSE là viết tắt của từ gì và dùng để làm gì?"
+        ],
+        answers: {
+          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?":
+            "<b>[Căn cứ Slide 1]</b> Học có giám sát là thuật toán học từ <b>tập dữ liệu gán nhãn (labeled data)</b> nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.",
+          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?":
+            "<b>[Căn cứ Slide 2]</b> Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa <b>biến phụ thuộc Y</b> và một hay nhiều <b>biến độc lập X</b> thông qua một đường thẳng.",
+          "MSE là viết tắt của từ gì và dùng để làm gì?":
+            "<b>[Căn cứ Slide 3]</b> MSE là viết tắt của <b>Mean Squared Error</b> (Trung bình bình phương sai số). Nó được dùng làm hàm mất mát (Loss Function) để đo lường sai số giữa giá trị dự đoán của mô hình và giá trị thực tế."
+        },
+        test: {
+          question: "Đặc điểm bắt buộc của tập dữ liệu đầu vào trong thuật toán 'Học có giám sát (Supervised Learning)' là gì?",
+          options: [
+            "A. Chỉ chứa các biến số (Features) mà không cần nhãn",
+            "B. Phải là tập dữ liệu đã gán nhãn (labeled data)",
+            "C. Phải có phân phối dạng đường thẳng tuyến tính",
+            "D. Không cần dữ liệu đầu vào, mô hình tự sinh ra"
+          ],
+          correctIndex: 1, // B
+          slideTarget: "slide-1",
+          slideName: "Slide 1 / 3: Học có giám sát (Supervised Learning)",
+          feedbackWrong: "Bạn đang nhầm lẫn giữa dữ liệu gán nhãn và dữ liệu chưa gán nhãn. Điểm khác biệt lớn nhất của Học có giám sát so với các phương pháp khác là tập dữ liệu huấn luyện luôn phải đi kèm với kết quả mong muốn (nhãn Y)."
+        }
+      },
+      thongthao: {
+        badgeClass: "badge-thongthao",
+        label: "Thông thạo",
+        questions: [
+          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?",
+          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?",
+          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?"
+        ],
+        answers: {
+          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?":
+            "<b>[Căn cứ Slide 3]</b> Hàm mất mát (MSE) đóng vai trò <b>đo lường độ sai lệch</b>, trong khi Gradient Descent đóng vai trò là <b>thuật toán tối ưu hóa</b>. Gradient Descent sẽ dựa vào giá trị MSE để tìm hướng giảm sai số xuống mức thấp nhất.",
+          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?":
+            "<b>[Căn cứ Slide 3]</b> Bạn cần nhìn vào giá trị của hàm mất mát <b>MSE</b>. Giá trị MSE càng nhỏ chứng tỏ đường thẳng dự đoán càng sát với dữ liệu thực tế (dự đoán tốt) và ngược lại.",
+          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?":
+            "<b>[Căn cứ Slide 2 & 3]</b> Trọng số w (weights) quyết định độ dốc của đường thẳng. Việc cập nhật trọng số liên tục giúp đường thẳng dịch chuyển dần đến vị trí khớp nhất với dữ liệu, nhằm <b>cực tiểu hóa hàm MSE</b>."
+        },
+        test: {
+          question: "Trong phương trình Hồi quy tuyến tính Y = w·X + b, vai trò chính của trọng số 'w (weight)' và việc cập nhật 'w' là gì?",
+          options: [
+            "A. w quyết định độ dốc đường thẳng, cập nhật w để cực tiểu hóa hàm MSE",
+            "B. w là điểm cắt trục tung, cập nhật w để tăng hàm MSE lên tối đa",
+            "C. w là số lượng nhãn dữ liệu, không thể thay đổi trong quá trình học",
+            "D. w là sai số dự đoán, cập nhật w để biến đường thẳng thành đường cong"
+          ],
+          correctIndex: 0, // A
+          slideTarget: "slide-2",
+          slideName: "Slide 2 / 3: Hồi quy tuyến tính (Linear Regression)",
+          feedbackWrong: "Bạn cần lưu ý: w (weight) là trọng số quyết định độ dốc của đường thẳng dự đoán. Mục tiêu của quá trình tối ưu hóa (Gradient Descent) là liên tục điều chỉnh w sao cho sai số MSE đạt giá trị nhỏ nhất."
+        }
+      },
+      nangcao: {
+        badgeClass: "badge-nangcao",
+        label: "Nâng cao",
+        questions: [
+          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?",
+          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?",
+          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?"
+        ],
+        answers: {
+          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?":
+            "<b>[Suy luận từ Slide 2]</b> Vì Hồi quy tuyến tính chỉ mô hình hóa bằng <b>một đường thẳng (quan hệ tuyến tính)</b>, nên nó sẽ hoạt động rất kém nếu dữ liệu thực tế có phân phối phi tuyến tính (cạnh cong, parabol, hoặc dữ liệu phân tán phức tạp).",
+          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?":
+            "<b>[Suy luận từ Slide 1]</b> <b>Không thể dùng được.</b> Điều kiện tiên quyết của Học có giám sát là bắt buộc phải có tập dữ liệu đã gán nhãn (labeled data) để làm chuẩn cho mô hình học.",
+          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?":
+            "<b>[Kiến thức mở rộng theo Slide 3]</b> Khi đó mô hình sẽ bị hiện tượng <b>không hội tụ (non-convergence)</b> hoặc kẹt ở cực tiểu cục bộ/lặp vô tận, dẫn đến việc dự đoán đầu ra cho dữ liệu mới có sai số rất lớn."
+        },
+        test: {
+          question: "Tại sao thuật toán Gradient Descent cần lặp lại nhiều lần để điều chỉnh trọng số thay vì tính toán một lần duy nhất?",
+          options: [
+            "A. Vì hàm mất mát MSE luôn có giá trị bằng 0 ở mọi thời điểm",
+            "B. Vì Gradient Descent là thuật toán lặp, tìm hướng dốc xuống để hội tụ dần về cực tiểu MSE",
+            "C. Vì tập dữ liệu Supervised Learning không bao giờ có nhãn đầu ra",
+            "D. Vì Hồi quy tuyến tính không dùng đường thẳng mà dùng phương trình đa thức"
+          ],
+          correctIndex: 1, // B
+          slideTarget: "slide-3",
+          slideName: "Slide 3 / 3: Hàm mất mát & Thuật toán Tối ưu hóa",
+          feedbackWrong: "Ở mức độ Nâng cao, bạn cần nắm rõ bản chất cơ chế lặp của Gradient Descent: do không thể biết ngay điểm đáy của hàm mất mát trong không gian nhiều chiều, thuật toán phải lặp từng bước nhỏ theo đạo hàm (độ dốc) để tìm điểm sai số cực tiểu."
+        }
+      }
+    };
+
+    let isMinimized = false;
+
+    window.onload = function() {
+      initChatTutor();
+    };
+
+    function initChatTutor() {
+      const chatMessages = document.getElementById('chat-messages');
+      const botMessageDiv = document.createElement('div');
+      botMessageDiv.className = 'message bot';
+      botMessageDiv.innerHTML = `
+        <span class="badge badge-tutor">AI Tutor</span>
+        <p>Chào bạn! Mình nhận thấy bạn đang xem <b>3 Slide bài giảng</b>. Để giúp bạn nắm chắc kiến thức mà không bị ngợp, <b>bạn đánh giá mức độ hiểu bài hiện tại của mình ở mức nào?</b></p>
+        <div style="margin-top: 10px;">
+          <button class="btn-level-chat" onclick="selectLevelInChat('coban')">🌱 Cơ bản</button>
+          <button class="btn-level-chat" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
+          <button class="btn-level-chat" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
+        </div>
+      `;
+      chatMessages.appendChild(botMessageDiv);
+      scrollToBottom();
+    }
+
+    function toggleChat() {
+      const chatSection = document.getElementById('chat-section');
+      const mainContainer = document.getElementById('main-container');
+      const btnToggle = document.getElementById('btn-toggle-chat');
+
+      isMinimized = !isMinimized;
+
+      if (isMinimized) {
+        chatSection.classList.add('minimized');
+        mainContainer.classList.add('chat-minimized');
+        btnToggle.innerText = "[+] Mở rộng";
+      } else {
+        chatSection.classList.remove('minimized');
+        mainContainer.classList.remove('chat-minimized');
+        btnToggle.innerText = "[-] Thu nhỏ";
+        scrollToBottom();
+      }
+    }
+
+    function selectLevelInChat(levelKey) {
+      const levelData = knowledgeBase[levelKey];
+      const chatMessages = document.getElementById('chat-messages');
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerText = `Tôi chọn mức độ: ${levelData.label}`;
+      chatMessages.appendChild(userMsg);
+
+      scrollToBottom();
+
+      setTimeout(() => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message bot';
+        botMessageDiv.innerHTML = `
+          <span class="badge ${levelData.badgeClass}">Mức độ: ${levelData.label}</span>
+          <p>Dưới đây là danh sách câu hỏi <b>${levelData.label}</b> và bài Test đánh giá nhanh được thiết kế riêng từ 3 Slide của bạn:</p>
+          <div class="suggestions-container">
+            ${levelData.questions.map(q => `<button class="btn-suggestion" onclick="askQuestion('${q}', '${levelKey}')">❓ ${q}</button>`).join('')}
+            <button class="btn-test-action" onclick="startQuiz('${levelKey}')">📝 Làm bài Test đánh giá năng lực (Mức độ ${levelData.label})</button>
+          </div>
+        `;
+        chatMessages.appendChild(botMessageDiv);
+        scrollToBottom();
+      }, 400);
+    }
+
+    // Khởi động làm bài test trắc nghiệm theo mức độ
+    function startQuiz(levelKey) {
+      const levelData = knowledgeBase[levelKey];
+      const testInfo = levelData.test;
+      const chatMessages = document.getElementById('chat-messages');
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerText = `Làm bài Test đánh giá năng lực (${levelData.label})`;
+      chatMessages.appendChild(userMsg);
+
+      scrollToBottom();
+
+      setTimeout(() => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message bot';
+        botMessageDiv.innerHTML = `
+          <span class="badge badge-test">Bài Test: ${levelData.label}</span>
+          <p><b>Câu hỏi:</b> ${testInfo.question}</p>
+          <div class="suggestions-container" style="margin-top: 10px;">
+            ${testInfo.options.map((opt, idx) => `
+              <button class="btn-option" onclick="submitQuizAnswer('${levelKey}', ${idx})">${opt}</button>
+            `).join('')}
+          </div>
+        `;
+        chatMessages.appendChild(botMessageDiv);
+        scrollToBottom();
+      }, 400);
+    }
+
+    // Kiểm tra kết quả, chấm điểm, hiển thị nhận xét & link tới Slide cải thiện
+    function submitQuizAnswer(levelKey, selectedIdx) {
+      const levelData = knowledgeBase[levelKey];
+      const testInfo = levelData.test;
+      const chatMessages = document.getElementById('chat-messages');
+
+      const isCorrect = (selectedIdx === testInfo.correctIndex);
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerText = testInfo.options[selectedIdx];
+      chatMessages.appendChild(userMsg);
+
+      scrollToBottom();
+
+      setTimeout(() => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message bot';
+
+        let resultHTML = "";
+
+        if (isCorrect) {
+          resultHTML = `
+            <span class="badge badge-tutor" style="background:#dcfce7; color:#15803d;">Kết quả: 10/10 - Chính xác! 🎉</span>
+            <p><b>Nhận xét:</b> Xuất sắc! Bạn đã nắm hoàn toàn chính xác kiến thức trọng tâm của mức độ <b>${levelData.label}</b> trong bài giảng.</p>
+            <div style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
+              <p style="font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">Bạn có thể thử thách bản thân với mức độ cao hơn:</p>
+              <div>
+                <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
+                <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
+              </div>
+            </div>
+          `;
+        } else {
+          resultHTML = `
+            <span class="badge badge-test" style="background:#fee2e2; color:#b91c1c;">Kết quả: Chưa chính xác (0/10)</span>
+            <p><b>Đáp án đúng là:</b> ${testInfo.options[testInfo.correctIndex]}</p>
+            <p style="margin-top: 8px;"><b>Điểm cần cải thiện:</b> ${testInfo.feedbackWrong}</p>
+            <div style="margin-top: 12px; background: #fffaf0; border: 1px solid #fed7aa; padding: 10px; border-radius: 8px;">
+              <p style="font-size: 0.85rem; font-weight: 600; color: #9a3412; margin-bottom: 6px;">👉 Tài liệu cải thiện:</p>
+              <button class="btn-suggestion" style="width:100%; border-color:#ea580c; color:#ea580c; font-weight:600;" onclick="scrollToSlide('${testInfo.slideTarget}')">
+                📖 Đọc lại ngay: ${testInfo.slideName}
+              </button>
+            </div>
+          `;
+        }
+
+        botMessageDiv.innerHTML = resultHTML;
+        chatMessages.appendChild(botMessageDiv);
+        scrollToBottom();
+      }, 500);
+    }
+
+    // Hàm chuyển hướng & làm nổi bật Slide cần ôn tập phía bên trái
+    function scrollToSlide(slideId) {
+      const slideElem = document.getElementById(slideId);
+      if (slideElem) {
+        slideElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Tạo hiệu ứng chớp sáng để học viên nhận biết ngay Slide cần xem
+        document.querySelectorAll('.slide-card').forEach(card => card.classList.remove('highlight'));
+        slideElem.classList.add('highlight');
+
+        setTimeout(() => {
+          slideElem.classList.remove('highlight');
+        }, 3500);
+      }
+    }
+
+    function askQuestion(questionText, levelKey = null) {
+      document.getElementById('user-input').value = '';
+      const chatMessages = document.getElementById('chat-messages');
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.innerText = questionText;
+      chatMessages.appendChild(userMsg);
+
+      scrollToBottom();
+
+      setTimeout(() => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'message bot';
+
+        let answerText = "Mình không tìm thấy thông tin trực tiếp trong 3 Slide trên để trả lời câu hỏi này.";
+        let badgeClass = "badge-tutor";
+        let labelName = "AI Tutor";
+
+        if (levelKey && knowledgeBase[levelKey].answers[questionText]) {
+          answerText = knowledgeBase[levelKey].answers[questionText];
+          badgeClass = knowledgeBase[levelKey].badgeClass;
+          labelName = knowledgeBase[levelKey].label;
+        } else {
+          for (const key in knowledgeBase) {
+            if (knowledgeBase[key].answers[questionText]) {
+              answerText = knowledgeBase[key].answers[questionText];
+              badgeClass = knowledgeBase[key].badgeClass;
+              labelName = knowledgeBase[key].label;
+              break;
+            }
+          }
+        }
+
+        botMessageDiv.innerHTML = `
+          <span class="badge ${badgeClass}">${labelName}</span>
+          <p>${answerText}</p>
+          <div class="suggestions-container" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
+            <div class="suggestion-title">Bạn có muốn đổi mức độ khác không?</div>
+            <div>
+              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('coban')">🌱 Cơ bản</button>
+              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
+              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
+            </div>
+          </div>
+        `;
+
+        chatMessages.appendChild(botMessageDiv);
+        scrollToBottom();
+      }, 500);
+    }
+
+    function sendMessage() {
+      const inputField = document.getElementById('user-input');
+      const text = inputField.value.trim();
+      if (!text) return;
+
+      askQuestion(text);
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    function scrollToBottom() {
+      const chatMessages = document.getElementById('chat-messages');
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>
