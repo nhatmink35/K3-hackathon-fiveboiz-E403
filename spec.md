@@ -199,12 +199,17 @@ Live test mô phỏng Labcoach nhập câu chưa hardcode đã PASS: backend tr�
   | Lê Văn Huy | 2A202601235 | Ngân hàng quiz, cơ chế không lặp, kiểm thử, validation và demo | 20% |
   | **Tổng** |  | **Mỗi người triển khai, kiểm tra và giải thích được phần có tên mình** | **100%** |
 
+- **Willing users dự kiến (cần xác nhận trước CP5):**
+  1. Vũ Minh Quang
+  2. Bùi Văn Khởi
+  3. Lý Thành Đạt
+
 - **Kế hoạch CP5:**
   1. Khi quota reset, chạy lại đủ 20 case bằng cùng golden set/bar; không ghi đè lượt đầu.
   2. Mời 5 người ngoài nhóm, mỗi người test 10 phút với một happy path và một task khó.
   3. Hỏi đúng ba câu trong guide; lưu tên/vai, quan sát và quote nguyên văn vào `validation/feedback-log.md`.
   4. Chọn 1–2 thay đổi dựa trên feedback và ghi §9; phần giữ nguyên phải có lý do.
-  5. Dry run demo 5 phút có bấm giờ: 1 case chuẩn + 1 case không đủ nguồn + số đo so với bar.
+  5. Dry run demo 10 phút có bấm giờ: 1 case chuẩn + 1 case không đủ nguồn + số đo so với bar.
 - **Review chéo:** mỗi thành viên review ít nhất một phần ngoài nhiệm vụ chính; cả 5 người cùng tham gia dry run và mỗi người trình bày ít nhất một phần trong demo.
 
 ## §9. Changelog
