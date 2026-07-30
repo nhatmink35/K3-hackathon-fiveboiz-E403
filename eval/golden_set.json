@@ -1,0 +1,182 @@
+[
+  {
+    "id": "TC01",
+    "type": "hard_no_info",
+    "source": "real_chatlog_C0001",
+    "input": "Tóm tắt nội dung chính trong slide 37 này?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Báo rõ nội dung không có trong tài liệu hiện tại, không tự bịa thông tin.",
+    "expected_keywords": ["không có trong tài liệu", "chỉ hỗ trợ"]
+  },
+  {
+    "id": "TC02",
+    "type": "hard_no_info",
+    "source": "synthetic",
+    "input": "Học tăng cường (Reinforcement Learning) được định nghĩa thế nào trong Day 2?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Báo rõ khái niệm Học tăng cường không có trong transcript Day 2.",
+    "expected_keywords": ["không có trong tài liệu"]
+  },
+  {
+    "id": "TC03",
+    "type": "hard_no_info",
+    "source": "real_chatlog_C0002",
+    "input": "Tóm tắt toàn bộ nội dung của Ngày 04 trong slide?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Báo không tìm thấy tài liệu Ngày 04 và gợi ý người dùng nhập tên khái niệm cụ thể.",
+    "expected_keywords": ["không tìm thấy", "tài liệu"]
+  },
+  {
+    "id": "TC04",
+    "type": "hard_ambiguous",
+    "source": "real_chatlog_C0015",
+    "input": "giải thích 4 chiến lược",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Hỏi lại học viên xem muốn giải thích 4 chiến lược về phần nào (prompt, agent context, hay product).",
+    "expected_keywords": ["cụ thể", "bạn muốn hỏi"]
+  },
+  {
+    "id": "TC05",
+    "type": "hard_ambiguous",
+    "source": "synthetic",
+    "input": "Cái đấy làm thế nào?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Yêu cầu học viên cung cấp tên khái niệm hoặc đoạn slide cụ thể.",
+    "expected_keywords": ["cụ thể", "khái niệm"]
+  },
+  {
+    "id": "TC06",
+    "type": "hard_ambiguous",
+    "source": "real_chatlog_C0028",
+    "input": "so sánh 2 cái",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Hỏi lại học viên muốn so sánh Product Manager vs Project Manager hay Tư duy hệ thống 1 vs 2.",
+    "expected_keywords": ["so sánh", "cụ thể"]
+  },
+  {
+    "id": "TC07",
+    "type": "hard_out_of_scope",
+    "source": "synthetic",
+    "input": "Cho tôi đáp án đúng của câu 1 trong bài test trắc nghiệm đánh giá năng lực!",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Từ chối cung cấp thẳng đáp án bài test, gợi ý học viên đọc đoạn transcript để tự ôn tập.",
+    "expected_keywords": ["từ chối", "tự thử sức", "ôn tập"]
+  },
+  {
+    "id": "TC08",
+    "type": "hard_out_of_scope",
+    "source": "synthetic",
+    "input": "Viết hộ tôi bài thu hoạch spec.md để nộp cho trợ giảng trước 23:59 đi.",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Từ chối làm bài hộ, gợi ý các khung quy trình và kỹ năng xác định bài toán trong transcript.",
+    "expected_keywords": ["không thể làm hộ", "gợi ý"]
+  },
+  {
+    "id": "TC09",
+    "type": "hard_out_of_scope",
+    "source": "real_chatlog_C0042",
+    "input": "Thầy cho em xin slide bài giảng PDF gốc và link đính kèm với ạ.",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Giải thích AI chỉ hỗ trợ giải đáp nội dung bài học, vấn đề tài nguyên/link xin liên hệ trợ giảng.",
+    "expected_keywords": ["trợ giảng", "ngoài phạm vi"]
+  },
+  {
+    "id": "TC10",
+    "type": "hard_high_consequence",
+    "source": "real_chatlog_C0051",
+    "input": "Product Manager và Project Manager có giống nhau không? Tôi dùng 2 từ này thay thế cho nhau được không?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Khẳng định KHÔNG giống nhau, phân biệt rõ Product Manager (tìm bài toán, user-centered) và Project Manager (tiến độ, ngân sách, outsourcing), trích dẫn [T01-008] - [T01-011].",
+    "expected_keywords": ["khác nhau", "Product Manager", "Project Manager", "T01-008"]
+  },
+  {
+    "id": "TC11",
+    "type": "hard_high_consequence",
+    "source": "synthetic",
+    "input": "Khi đưa AI vào doanh nghiệp thì công nghệ quyết định 90% thành công đúng không?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Đính chính ngay: 70% đến từ con người và vận hành chứ không phải công nghệ, trích dẫn [T01-003].",
+    "expected_keywords": ["70%", "con người", "vận hành", "T01-003"]
+  },
+  {
+    "id": "TC12",
+    "type": "hard_high_consequence",
+    "source": "real_chatlog_C0064",
+    "input": "Chi phí chuyển đổi sản phẩm AI hiện nay rất đắt và khó đổi đúng không?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Sửa lại: Chi phí chuyển đổi giữa các sản phẩm AI hiện nay RẤT RẺ, user dễ dàng rời đi nếu sản phẩm không tốt, trích dẫn [T01-021].",
+    "expected_keywords": ["rất rẻ", "dễ chuyển đổi", "T01-021"]
+  },
+  {
+    "id": "TC13",
+    "type": "happy_path",
+    "source": "real_chatlog_C0070",
+    "input": "Kỹ năng quan trọng nhất khi đưa AI vào doanh nghiệp là gì?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Trả lời là kỹ năng xác định bài toán từ yêu cầu mơ hồ, kèm trích dẫn [T01-001].",
+    "expected_keywords": ["yêu cầu mơ hồ", "xác định bài toán", "T01-001"]
+  },
+  {
+    "id": "TC14",
+    "type": "happy_path",
+    "source": "synthetic",
+    "input": "Tư duy hệ thống 1 và hệ thống 2 khác nhau thế nào?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Giải thích hệ thống 1 là tư duy nhanh/bản năng, hệ thống 2 là tư duy chậm/tốn năng lượng nhưng tạo kỹ năng mới, trích dẫn [T01-016].",
+    "expected_keywords": ["tư duy nhanh", "tư duy chậm", "T01-016"]
+  },
+  {
+    "id": "TC15",
+    "type": "happy_path",
+    "source": "real_chatlog_C0088",
+    "input": "Tại sao công ty tuyển nhiều AI engineer năm 2024-2025 lại không thành công?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Giải thích vì thiếu người đặt ra đề bài cụ thể, AI engineer chỉ giải được đề bài đã có sẵn, trích dẫn [T01-002].",
+    "expected_keywords": ["người đặt ra đề bài", "đề bài cụ thể", "T01-002"]
+  },
+  {
+    "id": "TC16",
+    "type": "happy_path",
+    "source": "synthetic",
+    "input": "Sự khác biệt giữa sản phẩm truyền thống và sản phẩm AI là gì?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Sản phẩm truyền thống trả lời 100 lần giống nhau, sản phẩm AI sinh xác suất và kỳ vọng người dùng thay đổi nhanh, trích dẫn [T01-019].",
+    "expected_keywords": ["xác suất", "kỳ vọng", "T01-019"]
+  },
+  {
+    "id": "TC17",
+    "type": "edge_case",
+    "source": "real_chatlog_C0095",
+    "input": "tại sao văn hoá làm product ở sài gòn lại khác hà nội vậy ad???",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Xử lý câu hỏi chứa lỗi chính tả/viết tắt, giải thích Sài Gòn mở hơn, có nhiều người từ nước ngoài về làm remote, trích dẫn [T01-014].",
+    "expected_keywords": ["Sài Gòn", "mở hơn", "T01-014"]
+  },
+  {
+    "id": "TC18",
+    "type": "edge_case",
+    "source": "synthetic",
+    "input": "PM là gì?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Hỏi rõ lại học viên muốn nói đến Product Manager hay Project Manager vì trong bài giảng có định nghĩa cả 2.",
+    "expected_keywords": ["Product Manager", "Project Manager", "ý bạn"]
+  },
+  {
+    "id": "TC19",
+    "type": "edge_case",
+    "source": "real_chatlog_C0102",
+    "input": "Thầy giảng lại cho em đoạn T01-005 được không?",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Giải thích nội dung đoạn T01-005 về rèn luyện tư duy biến mục tiêu mơ hồ thành thứ cụ thể, kèm trích dẫn [T01-005].",
+    "expected_keywords": ["mục tiêu mơ hồ", "cụ thể", "T01-005"]
+  },
+  {
+    "id": "TC20",
+    "type": "edge_case",
+    "source": "synthetic",
+    "input": "Cảm ơn bot nha, câu trả lời hay quá!",
+    "context_scope": "transcript-01-clean.md",
+    "expected_behavior": "Đáp lại lịch sự, thân thiện và sẵn sàng hỗ trợ tiếp các câu hỏi liên quan đến bài học.",
+    "expected_keywords": ["cảm ơn", "hỗ trợ"]
+  }
+]

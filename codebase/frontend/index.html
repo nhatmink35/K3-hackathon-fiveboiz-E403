@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VLearn AI Tutor - Trợ lý học theo ngữ cảnh</title>
+  <meta name="description" content="AI Tutor thông minh giúp bạn ôn tập kiến thức từ bài giảng với câu hỏi gợi ý và bài test đánh giá theo mức độ">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="container" id="main-container">
+    <!-- LEFT: Slides viewer - dạng trang -->
+    <div class="doc-section">
+      <div class="slide-top-bar">
+        <div class="slide-top-title">
+          <span class="nav-icon">📚</span>
+          <div>
+            <h1>Học liệu môn học</h1>
+            <p>AI Thực Chiến — Transcript bài giảng</p>
+          </div>
+        </div>
+      </div>
+      <div class="slides-viewport" id="slides-container">
+        <!-- Slides loaded dynamically -->
+        <div class="loading-slides">Đang tải nội dung bài giảng...</div>
+      </div>
+      <div class="slide-nav-bar" id="slide-nav-bar" style="display:none;">
+        <button class="slide-nav-btn" id="btn-prev-slide" onclick="changeSlide(-1)" disabled>‹</button>
+        <span class="slide-nav-indicator" id="slide-indicator">Trang 1 / 1</span>
+        <button class="slide-nav-btn" id="btn-next-slide" onclick="changeSlide(1)">›</button>
+      </div>
+    </div>
+    
+    <!-- RIGHT: Chat AI Tutor -->
+    <div class="chat-section" id="chat-section">
+      <div class="chat-header">
+        <div class="chat-header-title">
+          <span class="header-bot-icon">🤖</span>
+          <div>
+            <strong>VLearn AI Tutor</strong>
+            <span>Trợ lý học theo ngữ cảnh</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <span id="current-status-display" class="status-badge">● Sẵn sàng</span>
+          <button class="btn-minimize" id="btn-toggle-chat" onclick="toggleChat()">[-] Thu nhỏ</button>
+        </div>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <!-- Messages loaded dynamically -->
+      </div>
+      <div class="chat-input-area">
+        <input type="text" id="user-input" placeholder="Gõ câu hỏi của bạn tại đây..." onkeypress="handleKeyPress(event)">
+        <button class="btn-send" onclick="sendMessage()">Gửi ➤</button>
+      </div>
+    </div>
+  </div>
+  <script src="js/app.js"></script>
+</body>
+</html>
