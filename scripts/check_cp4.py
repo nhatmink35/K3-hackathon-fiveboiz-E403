@@ -24,7 +24,8 @@ def main() -> None:
 
     spec = SPEC.read_text(encoding="utf-8")
     report = REPORT.read_text(encoding="utf-8")
-    cases = json.loads(GOLDEN_SET.read_text(encoding="utf-8"))["cases"]
+    golden_set = json.loads(GOLDEN_SET.read_text(encoding="utf-8"))
+    cases = golden_set["cases"] if isinstance(golden_set, dict) else golden_set
 
     require("Chưa chốt ở mốc 1" not in spec, "spec still contains old placeholder")
     require("Chưa thực hiện ở mốc 1" not in spec, "research is not finalized")
@@ -35,7 +36,11 @@ def main() -> None:
     require("85%" in spec, "quality bar missing")
     require(len(cases) >= 20, "golden set has fewer than 20 cases")
     require(
-        sum(str(case["source"]).startswith("chatlog:") for case in cases) >= 10,
+        sum(
+            str(case["source"]).startswith(("chatlog:", "real_chatlog_"))
+            for case in cases
+        )
+        >= 10,
         "golden set has fewer than 10 chatlog-derived cases",
     )
     require(report.count("| T") >= 5, "evidence report has fewer than 5 turn examples")
