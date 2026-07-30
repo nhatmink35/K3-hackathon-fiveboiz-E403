@@ -212,11 +212,10 @@ Live test mô phỏng Labcoach nhập câu chưa hardcode đã PASS: backend tr�
 | Thời điểm | Đổi gì | Vì sao |
 |---|---|---|
 | 2026-07-30 | Tạo bản spec mốc 1: lát cắt, phạm vi, ba mức kiến thức, conditional automation, 10 kịch bản rủi ro và quality bar dự kiến | Chuyển prototype hardcode hiện tại thành phạm vi build và đo được |
-| 2026-07-30 | Bỏ qua tên/phân công thành viên và willing users trong phạm vi build | Theo yêu cầu của nhóm để chuyển sang xử lý dữ liệu slide |
+| 2026-07-30 | Phân công công việc cho các thành viên | Mỗi thành viên phụ trách một nhóm nhiệm vụ và đóng góp ~20% |
 | 2026-07-30 | Chuẩn hóa 58 trang từ hai bộ slide thành JSONL có mã trang và citation ổn định | Làm nguồn truy xuất cho backend ở mốc 3 |
 | 2026-07-30 | Thêm backend HTTP API, BM25-like retrieval và session state trong RAM | Hoàn thành mốc 3 mà không cần tải dependency; chuẩn bị điểm nối AI thật |
 | 2026-07-30 | Thêm Gemini 3.5 Flash grounded generation, citation allowlist và golden set 20 case cùng eval runner | Đáp ứng artifact CP3: AI thật + lượt đo đầu có đủ case |
 | 2026-07-30 | Chốt CP4: evidence mining chuẩn B, bảng impact 3 ứng viên, nghiên cứu sản phẩm tương tự và cập nhật phạm vi MVP khớp bản build | Đáp ứng checklist §2.7 của guide; quality bar khóa từ commit này |
 | 2026-07-30 | Thay danh sách text slide bằng PDF viewer Day 1/Day 2; citation và quiz mở đúng trang | Hoàn thiện hành vi xem nguồn đã khai trong phạm vi, giữ nguyên lát cắt và quality bar |
 | 2026-07-30 | Mở rộng ngân hàng quiz lên 12 câu; sau mọi đáp án đều hiện câu hỏi gợi ý và nút làm test tiếp, không lặp câu trong một vòng | Tạo luồng tự học liên tục và phủ thêm kiến thức từ hai bộ slide |
-| 2026-07-30 | Bổ sung danh sách 5 thành viên và phân công có tên, mỗi người 20% | Đáp ứng yêu cầu phân công minh bạch, mỗi thành viên đóng góp không nhỏ hơn 15% |
