@@ -5,3 +5,7 @@ __pycache__/
 *.py[cod]
 data/vlearn-pack/processed/
 eval/private-results/
+
+# Ignore local data assets and datasets
+/data/
+data/
