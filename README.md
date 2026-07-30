@@ -2,6 +2,19 @@
 
 **SPEC → Prototype → Demo.** Đây không phải cuộc thi code — đây là cuộc thi **tư duy sản phẩm AI**.
 
+## Nhóm Fiveboiz E403
+
+| Thành viên | Mã học viên | Phụ trách chính | Tỷ lệ đóng góp |
+|---|---|---|---:|
+| Nguyễn Hữu Nhật Minh | 2A202601551 | Product owner: chốt lát cắt, evidence, AI Spec, quality bar và điều phối tiến độ | 20% |
+| Ngô Hữu Nghĩa | 2A202601924 | AI backend: API chatbot, Gemini, prompt, session và xử lý lỗi/fallback | 20% |
+| Bùi Văn Khởi | 2A202601723 | Data & retrieval: chuẩn hóa slide, tìm kiếm nội dung, citation và golden set | 20% |
+| Lý Thành Đạt | 2A202601469 | Frontend: giao diện chatbot, slide PDF viewer, responsive và tích hợp API | 20% |
+| Lê Văn Huy | 2A202601235 | Quiz & quality: ngân hàng câu hỏi, luồng không lặp, test, validation và demo | 20% |
+| **Tổng** |  | **Cả nhóm cùng review, chạy thử và giải thích được phần được giao** | **100%** |
+
+Mỗi thành viên chịu trách nhiệm triển khai, kiểm tra và tạo commit cho phần được giao; đồng thời review chéo ít nhất một phần của thành viên khác trước khi demo.
+
 - Thời lượng: **1,5 ngày** (một ngày build + một buổi demo)
 - Nhóm: **4-5 người** · zone tối đa 5 nhóm · thi theo lớp
 

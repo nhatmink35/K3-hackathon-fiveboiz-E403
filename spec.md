@@ -188,13 +188,24 @@ Live test mô phỏng Labcoach nhập câu chưa hardcode đã PASS: backend tr�
 ## §8. Phân công & kế hoạch
 
 - Phương án automation đã chọn: conditional thay vì automate hoàn toàn, do cost-of-error của kiến thức sai cao.
+- **Phân công có tên và tỷ lệ đóng góp:**
+
+  | Thành viên | Mã học viên | Phần việc chịu trách nhiệm | Đóng góp |
+  |---|---|---|---:|
+  | Nguyễn Hữu Nhật Minh | 2A202601551 | Product, evidence, lát cắt, spec, quality bar và điều phối checkpoint | 20% |
+  | Ngô Hữu Nghĩa | 2A202601924 | Backend chatbot, Gemini, prompt, session, fallback và xử lý lỗi API | 20% |
+  | Bùi Văn Khởi | 2A202601723 | Chuẩn hóa data slide, retrieval, citation, golden set và báo cáo eval | 20% |
+  | Lý Thành Đạt | 2A202601469 | Frontend chatbot, PDF viewer, responsive và kết nối frontend–backend | 20% |
+  | Lê Văn Huy | 2A202601235 | Ngân hàng quiz, cơ chế không lặp, kiểm thử, validation và demo | 20% |
+  | **Tổng** |  | **Mỗi người triển khai, kiểm tra và giải thích được phần có tên mình** | **100%** |
+
 - **Kế hoạch CP5:**
   1. Khi quota reset, chạy lại đủ 20 case bằng cùng golden set/bar; không ghi đè lượt đầu.
   2. Mời 5 người ngoài nhóm, mỗi người test 10 phút với một happy path và một task khó.
   3. Hỏi đúng ba câu trong guide; lưu tên/vai, quan sát và quote nguyên văn vào `validation/feedback-log.md`.
   4. Chọn 1–2 thay đổi dựa trên feedback và ghi §9; phần giữ nguyên phải có lý do.
   5. Dry run demo 5 phút có bấm giờ: 1 case chuẩn + 1 case không đủ nguồn + số đo so với bar.
-- **Owner theo vai trò:** Evidence owner giữ mining/report; Product owner điều phối validation; Tech owner chạy eval/demo; Demo owner bấm giờ và ghi log. Tên thật do nhóm điền trước khi gặp TA, không được tự suy đoán trong spec.
+- **Review chéo:** mỗi thành viên review ít nhất một phần ngoài nhiệm vụ chính; cả 5 người cùng tham gia dry run và mỗi người trình bày ít nhất một phần trong demo.
 
 ## §9. Changelog
 
@@ -206,3 +217,6 @@ Live test mô phỏng Labcoach nhập câu chưa hardcode đã PASS: backend tr�
 | 2026-07-30 | Thêm backend HTTP API, BM25-like retrieval và session state trong RAM | Hoàn thành mốc 3 mà không cần tải dependency; chuẩn bị điểm nối AI thật |
 | 2026-07-30 | Thêm Gemini 3.5 Flash grounded generation, citation allowlist và golden set 20 case cùng eval runner | Đáp ứng artifact CP3: AI thật + lượt đo đầu có đủ case |
 | 2026-07-30 | Chốt CP4: evidence mining chuẩn B, bảng impact 3 ứng viên, nghiên cứu sản phẩm tương tự và cập nhật phạm vi MVP khớp bản build | Đáp ứng checklist §2.7 của guide; quality bar khóa từ commit này |
+| 2026-07-30 | Thay danh sách text slide bằng PDF viewer Day 1/Day 2; citation và quiz mở đúng trang | Hoàn thiện hành vi xem nguồn đã khai trong phạm vi, giữ nguyên lát cắt và quality bar |
+| 2026-07-30 | Mở rộng ngân hàng quiz lên 12 câu; sau mọi đáp án đều hiện câu hỏi gợi ý và nút làm test tiếp, không lặp câu trong một vòng | Tạo luồng tự học liên tục và phủ thêm kiến thức từ hai bộ slide |
+| 2026-07-30 | Bổ sung danh sách 5 thành viên và phân công có tên, mỗi người 20% | Đáp ứng yêu cầu phân công minh bạch, mỗi thành viên đóng góp không nhỏ hơn 15% |
