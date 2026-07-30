@@ -71,6 +71,56 @@
       scroll-behavior: smooth;
     }
 
+    .slide-viewer-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-deck {
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: #475569;
+      padding: 8px 12px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-deck.active {
+      color: #fff;
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .pdf-page-status {
+      margin-left: auto;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: #e2e8f0;
+    }
+
+    .citation-link {
+      border: 0;
+      cursor: pointer;
+      margin: 2px 4px 2px 0;
+    }
+
+    .citation-link:hover {
+      filter: brightness(0.94);
+      text-decoration: underline;
+    }
+
     .slide-card {
       background: #ffffff;
       border: 1px solid var(--border-color);
@@ -269,6 +319,16 @@
       background: #f8fafc;
     }
 
+    .btn-option:disabled {
+      cursor: not-allowed;
+      opacity: 0.62;
+    }
+
+    .btn-option:disabled:hover {
+      border-color: #cbd5e1;
+      background: #fff;
+    }
+
     .btn-level-chat {
       background: #fff;
       border: 1.5px solid var(--primary-color);
@@ -367,56 +427,17 @@
   <div class="container" id="main-container">
     <!-- KHU VỰC 1: SLIDE BÀI HỌC (3 SLIDE CÓ THỂ CUỘN - KHÔNG CÓ TIÊU ĐỀ) -->
     <div class="doc-section">
-      <div class="slides-container" id="slides-container">
-        <!-- Slide 1 -->
-        <div class="slide-card" id="slide-1">
-          <div class="slide-header">
-            <span>Bài 4: Học có giám sát (Supervised Learning)</span>
-            <span class="slide-number">Slide 1 / 3</span>
-          </div>
-          <div class="slide-content">
-            <p><b>Định nghĩa cốt lõi:</b></p>
-            <p>Học có giám sát là thuật toán học từ tập dữ liệu gán nhãn (labeled data) nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.</p>
-            <ul>
-              <li><b>Dữ liệu đầu vào (X):</b> Các đặc trưng (Features) thu thập được.</li>
-              <li><b>Nhãn đầu ra (Y):</b> Kết quả thực tế tương ứng (Label / Target).</li>
-              <li><b>Mục tiêu:</b> Tìm ra hàm ánh xạ tối ưu <i>f(X) → Y</i>.</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="slide-card" id="slide-2">
-          <div class="slide-header">
-            <span>Hồi quy tuyến tính (Linear Regression)</span>
-            <span class="slide-number">Slide 2 / 3</span>
-          </div>
-          <div class="slide-content">
-            <p><b>Mô hình hóa dữ liệu:</b></p>
-            <p>Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa biến phụ thuộc Y và một hay nhiều biến độc lập X thông qua một đường thẳng.</p>
-            <ul>
-              <li><b>Phương trình đơn giản:</b> <i>Y = w·X + b</i></li>
-              <li>Trong đó <b>w (weight)</b> là trọng số quyết định độ dốc đường thẳng.</li>
-              <li><b>b (bias)</b> là hệ số tự do (điểm cắt trục tung).</li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="slide-card" id="slide-3">
-          <div class="slide-header">
-            <span>Hàm mất mát & Thuật toán Tối ưu hóa</span>
-            <span class="slide-number">Slide 3 / 3</span>
-          </div>
-          <div class="slide-content">
-            <p><b>Làm sao để mô hình tự học chính xác hơn?</b></p>
-            <ul>
-              <li><b>Hàm mất mát (Loss Function - MSE):</b> Sử dụng Mean Squared Error để đo lường trung bình bình phương sai số giữa giá trị dự đoán của mô hình và thực tế.</li>
-              <li><b>Tối ưu hóa (Gradient Descent):</b> Thuật toán lặp tự động điều chỉnh và cập nhật trọng số (weights) theo hướng giảm dần sai số, nhằm cực tiểu hóa hàm MSE.</li>
-            </ul>
-          </div>
-        </div>
+      <div class="slide-viewer-toolbar">
+        <button class="btn-deck active" data-document-id="D1">Day 1 · AI & LLM Foundation</button>
+        <button class="btn-deck" data-document-id="D2">Day 2 · Xác định bài toán</button>
+        <span class="pdf-page-status" id="pdf-page-status">Day 1 · Trang 1 / 29</span>
       </div>
+      <iframe
+        class="pdf-viewer"
+        id="pdf-viewer"
+        title="Slide bài giảng VLearn"
+        src="data/vlearn-pack/slides/d1-slide-hackathon.pdf#page=1&view=FitH"
+      ></iframe>
     </div>
 
     <!-- KHU VỰC 2: KHUNG CHAT AI TUTOR -->
@@ -441,105 +462,275 @@
   </div>
 
   <script>
-    // Dữ liệu câu hỏi, câu trả lời, và ngân hàng câu hỏi test theo từng mức độ
+    const API_BASE_URL = 'http://127.0.0.1:8000';
+    let tutorSessionId = null;
+    let currentLevelKey = 'coban';
+
+    // Câu hỏi gợi ý và ngân hàng quiz theo từng mức độ.
     const knowledgeBase = {
       coban: {
         badgeClass: "badge-coban",
         label: "Cơ bản",
         questions: [
-          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?",
-          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?",
-          "MSE là viết tắt của từ gì và dùng để làm gì?"
+          "AI, Machine Learning, Deep Learning, GenAI và LLM khác nhau thế nào?",
+          "Token là gì và vì sao model không đọc nguyên từng từ?",
+          "Một problem statement một câu cần mô tả những gì?"
         ],
-        answers: {
-          "Học có giám sát (Supervised Learning) là gì theo tài liệu trên?":
-            "<b>[Căn cứ Slide 1]</b> Học có giám sát là thuật toán học từ <b>tập dữ liệu gán nhãn (labeled data)</b> nhằm mục đích dự đoán đầu ra cho các dữ liệu mới trong tương lai.",
-          "Hồi quy tuyến tính (Linear Regression) được định nghĩa như thế nào?":
-            "<b>[Căn cứ Slide 2]</b> Hồi quy tuyến tính là phương pháp mô hình hóa mối quan hệ giữa <b>biến phụ thuộc Y</b> và một hay nhiều <b>biến độc lập X</b> thông qua một đường thẳng.",
-          "MSE là viết tắt của từ gì và dùng để làm gì?":
-            "<b>[Căn cứ Slide 3]</b> MSE là viết tắt của <b>Mean Squared Error</b> (Trung bình bình phương sai số). Nó được dùng làm hàm mất mát (Loss Function) để đo lường sai số giữa giá trị dự đoán của mô hình và giá trị thực tế."
-        },
-        test: {
-          question: "Đặc điểm bắt buộc của tập dữ liệu đầu vào trong thuật toán 'Học có giám sát (Supervised Learning)' là gì?",
-          options: [
-            "A. Chỉ chứa các biến số (Features) mà không cần nhãn",
-            "B. Phải là tập dữ liệu đã gán nhãn (labeled data)",
-            "C. Phải có phân phối dạng đường thẳng tuyến tính",
-            "D. Không cần dữ liệu đầu vào, mô hình tự sinh ra"
-          ],
-          correctIndex: 1, // B
-          slideTarget: "slide-1",
-          slideName: "Slide 1 / 3: Học có giám sát (Supervised Learning)",
-          feedbackWrong: "Bạn đang nhầm lẫn giữa dữ liệu gán nhãn và dữ liệu chưa gán nhãn. Điểm khác biệt lớn nhất của Học có giám sát so với các phương pháp khác là tập dữ liệu huấn luyện luôn phải đi kèm với kết quả mong muốn (nhãn Y)."
-        }
+        answers: {},
+        tests: [
+          {
+            question: "Theo Day 1, LLM nằm ở đâu trong hệ các khái niệm AI?",
+            options: [
+              "A. LLM là chiếc ô lớn nhất bao trùm toàn bộ AI",
+              "B. LLM là model nền chuyên ngôn ngữ thuộc Generative AI",
+              "C. LLM hoàn toàn không liên quan đến Deep Learning",
+              "D. LLM chỉ là tên gọi khác của chatbot"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-3",
+            slideName: "Day 1 · Trang 3: Bức tranh AI",
+            feedbackWrong: "LLM là model nền chuyên ngôn ngữ trong Generative AI; chatbot chỉ là sản phẩm đóng gói quanh model."
+          },
+          {
+            question: "Token trong LLM được hiểu đúng nhất là gì?",
+            options: [
+              "A. Luôn là một từ hoàn chỉnh",
+              "B. Một mảnh chữ mà model dùng để đọc và sinh ngôn ngữ",
+              "C. Một trang PDF",
+              "D. Một API key"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-13",
+            slideName: "Day 1 · Trang 13: Token",
+            feedbackWrong: "Model không đọc nguyên từng từ mà xử lý các mảnh chữ gọi là token."
+          },
+          {
+            question: "Context window giống hình ảnh nào trong slide?",
+            options: [
+              "A. Một bàn làm việc có diện tích hữu hạn",
+              "B. Một kho vô hạn không bao giờ đầy",
+              "C. Một bộ dữ liệu huấn luyện",
+              "D. Một công cụ tìm kiếm web"
+            ],
+            correctIndex: 0,
+            slideTarget: "slide-D1-14",
+            slideName: "Day 1 · Trang 14: Context",
+            feedbackWrong: "Context được ví như bàn làm việc có hạn: model chỉ nhìn được lượng nội dung nằm trong cửa sổ đó."
+          },
+          {
+            question: "Một problem statement tốt có nên chứa sẵn tên giải pháp không?",
+            options: [
+              "A. Có, luôn phải ghi model sẽ dùng",
+              "B. Không, nó mô tả vấn đề cụ thể cần giải quyết",
+              "C. Có, phải ghi agent ngay từ đầu",
+              "D. Chỉ cần ghi giao diện mong muốn"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D2-9",
+            slideName: "Day 2 · Trang 9: Bài toán một câu",
+            feedbackWrong: "Problem statement tập trung vào vấn đề, người dùng và kết quả; không nhét sẵn giải pháp."
+          }
+        ]
       },
       thongthao: {
         badgeClass: "badge-thongthao",
         label: "Thông thạo",
         questions: [
-          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?",
-          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?",
-          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?"
+          "Context và attention giữ vai trò gì khi LLM xử lý câu hỏi?",
+          "Từ LLM đến agent có những mức năng lực nào?",
+          "Baseline, target và measurement liên hệ với nhau thế nào?"
         ],
-        answers: {
-          "Mối quan hệ giữa Hàm mất mát (MSE) và thuật toán Gradient Descent là gì?":
-            "<b>[Căn cứ Slide 3]</b> Hàm mất mát (MSE) đóng vai trò <b>đo lường độ sai lệch</b>, trong khi Gradient Descent đóng vai trò là <b>thuật toán tối ưu hóa</b>. Gradient Descent sẽ dựa vào giá trị MSE để tìm hướng giảm sai số xuống mức thấp nhất.",
-          "Làm sao biết mô hình Hồi quy tuyến tính đang dự đoán tốt hay tệ?":
-            "<b>[Căn cứ Slide 3]</b> Bạn cần nhìn vào giá trị của hàm mất mát <b>MSE</b>. Giá trị MSE càng nhỏ chứng tỏ đường thẳng dự đoán càng sát với dữ liệu thực tế (dự đoán tốt) và ngược lại.",
-          "Tại sao lại cần 'cập nhật trọng số (weights)' trong quá trình học?":
-            "<b>[Căn cứ Slide 2 & 3]</b> Trọng số w (weights) quyết định độ dốc của đường thẳng. Việc cập nhật trọng số liên tục giúp đường thẳng dịch chuyển dần đến vị trí khớp nhất với dữ liệu, nhằm <b>cực tiểu hóa hàm MSE</b>."
-        },
-        test: {
-          question: "Trong phương trình Hồi quy tuyến tính Y = w·X + b, vai trò chính của trọng số 'w (weight)' và việc cập nhật 'w' là gì?",
-          options: [
-            "A. w quyết định độ dốc đường thẳng, cập nhật w để cực tiểu hóa hàm MSE",
-            "B. w là điểm cắt trục tung, cập nhật w để tăng hàm MSE lên tối đa",
-            "C. w là số lượng nhãn dữ liệu, không thể thay đổi trong quá trình học",
-            "D. w là sai số dự đoán, cập nhật w để biến đường thẳng thành đường cong"
-          ],
-          correctIndex: 0, // A
-          slideTarget: "slide-2",
-          slideName: "Slide 2 / 3: Hồi quy tuyến tính (Linear Regression)",
-          feedbackWrong: "Bạn cần lưu ý: w (weight) là trọng số quyết định độ dốc của đường thẳng dự đoán. Mục tiêu của quá trình tối ưu hóa (Gradient Descent) là liên tục điều chỉnh w sao cho sai số MSE đạt giá trị nhỏ nhất."
-        }
+        answers: {},
+        tests: [
+          {
+            question: "Điểm khác biệt cốt lõi khi chuyển từ LLM sang agent là gì?",
+            options: [
+              "A. Chỉ đổi màu giao diện",
+              "B. Thêm công cụ, trạng thái và vòng lặp để đạt mục tiêu",
+              "C. Không cần model ngôn ngữ",
+              "D. Agent luôn đúng"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-23",
+            slideName: "Day 1 · Trang 23: Từ LLM đến agent",
+            feedbackWrong: "Agent bổ sung khả năng hành động, công cụ, trạng thái và vòng lặp; không có nghĩa agent luôn đúng."
+          },
+          {
+            question: "Attention giúp model làm gì?",
+            options: [
+              "A. Mỗi token nhìn sang các token liên quan trong context",
+              "B. Tăng dung lượng ổ cứng",
+              "C. Xóa toàn bộ prompt",
+              "D. Thay thế dữ liệu huấn luyện"
+            ],
+            correctIndex: 0,
+            slideTarget: "slide-D1-15",
+            slideName: "Day 1 · Trang 15: Attention",
+            feedbackWrong: "Attention giúp mỗi token tập trung vào những token quan trọng khác trong ngữ cảnh."
+          },
+          {
+            question: "Baseline, target và measurement dùng để làm gì?",
+            options: [
+              "A. Định lượng hiện trạng, mục tiêu và cách biết đã cải thiện",
+              "B. Chọn màu cho giao diện",
+              "C. Thay thế problem statement",
+              "D. Loại bỏ bước đo lường"
+            ],
+            correctIndex: 0,
+            slideTarget: "slide-D2-11",
+            slideName: "Day 2 · Trang 11: Baseline, Target, Measurement",
+            feedbackWrong: "Baseline mô tả hiện trạng, target là ngưỡng cần đạt và measurement là cách chứng minh kết quả."
+          },
+          {
+            question: "Theo cây quyết định giải pháp, nên ưu tiên cấp độ nào?",
+            options: [
+              "A. Cấp phức tạp nhất có thể",
+              "B. Cấp đơn giản nhất đủ giải quyết bài toán",
+              "C. Luôn luôn là agent",
+              "D. Luôn luôn automate hoàn toàn"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D2-21",
+            slideName: "Day 2 · Trang 21: Cây quyết định giải pháp",
+            feedbackWrong: "Nguyên tắc là chọn cấp độ đơn giản nhất vẫn đủ giải quyết bài toán và đạt mục tiêu."
+          }
+        ]
       },
       nangcao: {
         badgeClass: "badge-nangcao",
         label: "Nâng cao",
         questions: [
-          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?",
-          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?",
-          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?"
+          "Khi nào automate hoàn toàn rủi ro hơn augment?",
+          "Vì sao nên chọn model theo tầng thay vì chỉ nhìn tên model?",
+          "Temperature và top_p tạo ra những đánh đổi nào?"
         ],
-        answers: {
-          "Hạn chế của mô hình Hồi quy tuyến tính khi áp dụng vào thực tế là gì?":
-            "<b>[Suy luận từ Slide 2]</b> Vì Hồi quy tuyến tính chỉ mô hình hóa bằng <b>một đường thẳng (quan hệ tuyến tính)</b>, nên nó sẽ hoạt động rất kém nếu dữ liệu thực tế có phân phối phi tuyến tính (cạnh cong, parabol, hoặc dữ liệu phân tán phức tạp).",
-          "Nếu dữ liệu không có nhãn (unlabeled data) thì có dùng được Supervised Learning không?":
-            "<b>[Suy luận từ Slide 1]</b> <b>Không thể dùng được.</b> Điều kiện tiên quyết của Học có giám sát là bắt buộc phải có tập dữ liệu đã gán nhãn (labeled data) để làm chuẩn cho mô hình học.",
-          "Điều gì xảy ra nếu thuật toán Gradient Descent không thể cực tiểu hóa hàm MSE?":
-            "<b>[Kiến thức mở rộng theo Slide 3]</b> Khi đó mô hình sẽ bị hiện tượng <b>không hội tụ (non-convergence)</b> hoặc kẹt ở cực tiểu cục bộ/lặp vô tận, dẫn đến việc dự đoán đầu ra cho dữ liệu mới có sai số rất lớn."
-        },
-        test: {
-          question: "Tại sao thuật toán Gradient Descent cần lặp lại nhiều lần để điều chỉnh trọng số thay vì tính toán một lần duy nhất?",
-          options: [
-            "A. Vì hàm mất mát MSE luôn có giá trị bằng 0 ở mọi thời điểm",
-            "B. Vì Gradient Descent là thuật toán lặp, tìm hướng dốc xuống để hội tụ dần về cực tiểu MSE",
-            "C. Vì tập dữ liệu Supervised Learning không bao giờ có nhãn đầu ra",
-            "D. Vì Hồi quy tuyến tính không dùng đường thẳng mà dùng phương trình đa thức"
-          ],
-          correctIndex: 1, // B
-          slideTarget: "slide-3",
-          slideName: "Slide 3 / 3: Hàm mất mát & Thuật toán Tối ưu hóa",
-          feedbackWrong: "Ở mức độ Nâng cao, bạn cần nắm rõ bản chất cơ chế lặp của Gradient Descent: do không thể biết ngay điểm đáy của hàm mất mát trong không gian nhiều chiều, thuật toán phải lặp từng bước nhỏ theo đạo hàm (độ dốc) để tìm điểm sai số cực tiểu."
-        }
+        answers: {},
+        tests: [
+          {
+            question: "Khi sai sót có hậu quả cao, mức automation phù hợp nhất là gì?",
+            options: [
+              "A. Automate mọi trường hợp",
+              "B. Augment hoặc conditional với điểm kiểm soát của con người",
+              "C. Luôn dùng agent tự chủ",
+              "D. Bỏ bước đo lường"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D2-17",
+            slideName: "Day 2 · Trang 17: Automate và Augment",
+            feedbackWrong: "Cost-of-error cao đòi hỏi giữ quyền quyết định hoặc điểm kiểm soát cho con người."
+          },
+          {
+            question: "Temperature cao thường tạo đánh đổi nào?",
+            options: [
+              "A. Ổn định hơn và luôn lặp lại",
+              "B. Đa dạng hơn nhưng dễ lệch khỏi lựa chọn chắc chắn",
+              "C. Không ảnh hưởng phân bố token",
+              "D. Luôn làm câu trả lời đúng hơn"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-29",
+            slideName: "Day 1 · Trang 29: Temperature và top_p",
+            feedbackWrong: "Temperature cao làm phân bố phẳng hơn, tăng đa dạng nhưng cũng tăng rủi ro chọn token kém chắc chắn."
+          },
+          {
+            question: "Vì sao không nên chọn model chỉ theo tên?",
+            options: [
+              "A. Vì mọi model hoàn toàn giống nhau",
+              "B. Vì nên chọn theo tầng năng lực, cost và yêu cầu công việc",
+              "C. Vì model không có giá",
+              "D. Vì chỉ context window quan trọng"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-26",
+            slideName: "Day 1 · Trang 26: Chọn model theo tầng",
+            feedbackWrong: "Tên model không đủ để ra quyết định; cần khớp tầng năng lực, chi phí và yêu cầu chất lượng."
+          },
+          {
+            question: "Vì sao output token cần được kiểm soát chặt?",
+            options: [
+              "A. Output luôn miễn phí",
+              "B. Vé ra thường đắt hơn vé vào và output dài làm tăng cost/latency",
+              "C. Output không tính token",
+              "D. Chỉ input ảnh hưởng chi phí"
+            ],
+            correctIndex: 1,
+            slideTarget: "slide-D1-27",
+            slideName: "Day 1 · Trang 27: Token có giá",
+            feedbackWrong: "Output token thường đắt hơn input token; câu trả lời dài không cần thiết làm tăng cả cost và latency."
+          }
+        ]
       }
     };
 
+    const quizState = Object.fromEntries(
+      Object.keys(knowledgeBase).map(levelKey => [
+        levelKey,
+        {queue: [], lastIndex: null, cycle: 0}
+      ])
+    );
+
     let isMinimized = false;
 
-    window.onload = function() {
+    window.onload = async function() {
       initChatTutor();
+      initSlideViewer();
+      await initBackendSession();
     };
+
+    const slideDocuments = {
+      D1: {
+        name: 'Day 1',
+        pages: 29,
+        url: 'data/vlearn-pack/slides/d1-slide-hackathon.pdf'
+      },
+      D2: {
+        name: 'Day 2',
+        pages: 29,
+        url: 'data/vlearn-pack/slides/d2-slide-hackathon.pdf'
+      }
+    };
+
+    function initSlideViewer() {
+      document.querySelectorAll('[data-document-id]').forEach(button => {
+        button.addEventListener('click', () => {
+          openPdfPage(button.dataset.documentId, 1);
+        });
+      });
+    }
+
+    function openPdfPage(documentId, page = 1) {
+      const documentInfo = slideDocuments[documentId];
+      if (!documentInfo) return;
+      const safePage = Math.max(1, Math.min(Number(page) || 1, documentInfo.pages));
+      document.getElementById('pdf-viewer').src =
+        `${documentInfo.url}#page=${safePage}&view=FitH`;
+      document.getElementById('pdf-page-status').innerText =
+        `${documentInfo.name} · Trang ${safePage} / ${documentInfo.pages}`;
+      document.querySelectorAll('[data-document-id]').forEach(button => {
+        button.classList.toggle(
+          'active',
+          button.dataset.documentId === documentId
+        );
+      });
+    }
+
+    async function initBackendSession() {
+      const status = document.getElementById('current-status-display');
+      status.innerText = 'Trạng thái: Đang kết nối AI...';
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/sessions`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({initial_level: currentLevelKey})
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        tutorSessionId = data.session.session_id;
+        status.innerText = 'Trạng thái: AI sẵn sàng';
+      } catch (error) {
+        status.innerText = 'Trạng thái: Chưa kết nối backend';
+      }
+    }
 
     function initChatTutor() {
       const chatMessages = document.getElementById('chat-messages');
@@ -547,7 +738,7 @@
       botMessageDiv.className = 'message bot';
       botMessageDiv.innerHTML = `
         <span class="badge badge-tutor">AI Tutor</span>
-        <p>Chào bạn! Mình nhận thấy bạn đang xem <b>3 Slide bài giảng</b>. Để giúp bạn nắm chắc kiến thức mà không bị ngợp, <b>bạn đánh giá mức độ hiểu bài hiện tại của mình ở mức nào?</b></p>
+        <p>Chào bạn! Mình có thể hỗ trợ bạn học từ <b>2 bộ slide Day 1 và Day 2</b>. Để giúp bạn nắm chắc kiến thức mà không bị ngợp, <b>bạn đánh giá mức độ hiểu bài hiện tại của mình ở mức nào?</b></p>
         <div style="margin-top: 10px;">
           <button class="btn-level-chat" onclick="selectLevelInChat('coban')">🌱 Cơ bản</button>
           <button class="btn-level-chat" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
@@ -577,9 +768,23 @@
       }
     }
 
-    function selectLevelInChat(levelKey) {
+    async function selectLevelInChat(levelKey) {
       const levelData = knowledgeBase[levelKey];
       const chatMessages = document.getElementById('chat-messages');
+      currentLevelKey = levelKey;
+
+      if (tutorSessionId) {
+        try {
+          await fetch(`${API_BASE_URL}/api/sessions/${tutorSessionId}`, {
+            method: 'PATCH',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({level: levelKey})
+          });
+        } catch (error) {
+          document.getElementById('current-status-display').innerText =
+            'Trạng thái: Không cập nhật được mức';
+        }
+      }
 
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
@@ -593,7 +798,7 @@
         botMessageDiv.className = 'message bot';
         botMessageDiv.innerHTML = `
           <span class="badge ${levelData.badgeClass}">Mức độ: ${levelData.label}</span>
-          <p>Dưới đây là danh sách câu hỏi <b>${levelData.label}</b> và bài Test đánh giá nhanh được thiết kế riêng từ 3 Slide của bạn:</p>
+          <p>Dưới đây là câu hỏi gợi ý <b>${levelData.label}</b> và ngân hàng Test từ hai bộ slide Day 1/Day 2:</p>
           <div class="suggestions-container">
             ${levelData.questions.map(q => `<button class="btn-suggestion" onclick="askQuestion('${q}', '${levelKey}')">❓ ${q}</button>`).join('')}
             <button class="btn-test-action" onclick="startQuiz('${levelKey}')">📝 Làm bài Test đánh giá năng lực (Mức độ ${levelData.label})</button>
@@ -607,7 +812,10 @@
     // Khởi động làm bài test trắc nghiệm theo mức độ
     function startQuiz(levelKey) {
       const levelData = knowledgeBase[levelKey];
-      const testInfo = levelData.test;
+      const testIndex = getNextQuizIndex(levelKey);
+      const testInfo = levelData.tests[testIndex];
+      const state = quizState[levelKey];
+      const position = levelData.tests.length - state.queue.length;
       const chatMessages = document.getElementById('chat-messages');
 
       const userMsg = document.createElement('div');
@@ -622,10 +830,11 @@
         botMessageDiv.className = 'message bot';
         botMessageDiv.innerHTML = `
           <span class="badge badge-test">Bài Test: ${levelData.label}</span>
+          <p style="font-size:0.82rem; color:#64748b;">Vòng ${state.cycle} · Câu ${position}/${levelData.tests.length}</p>
           <p><b>Câu hỏi:</b> ${testInfo.question}</p>
           <div class="suggestions-container" style="margin-top: 10px;">
             ${testInfo.options.map((opt, idx) => `
-              <button class="btn-option" onclick="submitQuizAnswer('${levelKey}', ${idx})">${opt}</button>
+              <button class="btn-option" onclick="submitQuizAnswer('${levelKey}', ${testIndex}, ${idx}, this)">${opt}</button>
             `).join('')}
           </div>
         `;
@@ -634,13 +843,54 @@
       }, 400);
     }
 
-    // Kiểm tra kết quả, chấm điểm, hiển thị nhận xét & link tới Slide cải thiện
-    function submitQuizAnswer(levelKey, selectedIdx) {
+    function getNextQuizIndex(levelKey) {
+      const tests = knowledgeBase[levelKey].tests;
+      const state = quizState[levelKey];
+      if (state.queue.length === 0) {
+        state.queue = tests.map((_, index) => index);
+        for (let index = state.queue.length - 1; index > 0; index--) {
+          const randomIndex = Math.floor(Math.random() * (index + 1));
+          [state.queue[index], state.queue[randomIndex]] =
+            [state.queue[randomIndex], state.queue[index]];
+        }
+        if (
+          state.queue.length > 1 &&
+          state.queue[0] === state.lastIndex
+        ) {
+          [state.queue[0], state.queue[1]] = [state.queue[1], state.queue[0]];
+        }
+        state.cycle += 1;
+      }
+      const nextIndex = state.queue.shift();
+      state.lastIndex = nextIndex;
+      return nextIndex;
+    }
+
+    function buildPostQuizActions(levelKey) {
       const levelData = knowledgeBase[levelKey];
-      const testInfo = levelData.test;
+      return `
+        <div class="suggestions-container" style="margin-top:15px; border-top:1px dashed #ccc; padding-top:10px;">
+          <div class="suggestion-title">Gợi ý câu hỏi để học tiếp</div>
+          ${levelData.questions.map(question => `
+            <button class="btn-suggestion" onclick="askQuestion('${question}', '${levelKey}')">❓ ${question}</button>
+          `).join('')}
+          <button class="btn-test-action" onclick="startQuiz('${levelKey}')">
+            📝 Làm câu Test tiếp theo · không lặp trong cùng vòng
+          </button>
+        </div>
+      `;
+    }
+
+    // Kiểm tra kết quả, chấm điểm, hiển thị nhận xét & link tới Slide cải thiện
+    function submitQuizAnswer(levelKey, testIndex, selectedIdx, selectedButton) {
+      const levelData = knowledgeBase[levelKey];
+      const testInfo = levelData.tests[testIndex];
       const chatMessages = document.getElementById('chat-messages');
 
       const isCorrect = (selectedIdx === testInfo.correctIndex);
+      selectedButton.closest('.suggestions-container')
+        .querySelectorAll('.btn-option')
+        .forEach(button => button.disabled = true);
 
       const userMsg = document.createElement('div');
       userMsg.className = 'message user';
@@ -658,14 +908,8 @@
         if (isCorrect) {
           resultHTML = `
             <span class="badge badge-tutor" style="background:#dcfce7; color:#15803d;">Kết quả: 10/10 - Chính xác! 🎉</span>
-            <p><b>Nhận xét:</b> Xuất sắc! Bạn đã nắm hoàn toàn chính xác kiến thức trọng tâm của mức độ <b>${levelData.label}</b> trong bài giảng.</p>
-            <div style="margin-top: 12px; border-top: 1px dashed #ccc; padding-top: 10px;">
-              <p style="font-size: 0.85rem; color: #4b5563; margin-bottom: 8px;">Bạn có thể thử thách bản thân với mức độ cao hơn:</p>
-              <div>
-                <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
-                <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
-              </div>
-            </div>
+            <p><b>Nhận xét:</b> Chính xác. Bạn có thể hỏi sâu hơn hoặc làm câu test tiếp theo ở mức <b>${levelData.label}</b>.</p>
+            ${buildPostQuizActions(levelKey)}
           `;
         } else {
           resultHTML = `
@@ -678,6 +922,7 @@
                 📖 Đọc lại ngay: ${testInfo.slideName}
               </button>
             </div>
+            ${buildPostQuizActions(levelKey)}
           `;
         }
 
@@ -689,6 +934,11 @@
 
     // Hàm chuyển hướng & làm nổi bật Slide cần ôn tập phía bên trái
     function scrollToSlide(slideId) {
+      const pdfTarget = /^slide-(D[12])-(\d+)$/.exec(slideId);
+      if (pdfTarget) {
+        openPdfPage(pdfTarget[1], Number(pdfTarget[2]));
+        return;
+      }
       const slideElem = document.getElementById(slideId);
       if (slideElem) {
         slideElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -703,7 +953,7 @@
       }
     }
 
-    function askQuestion(questionText, levelKey = null) {
+    async function askQuestion(questionText, levelKey = null) {
       document.getElementById('user-input').value = '';
       const chatMessages = document.getElementById('chat-messages');
 
@@ -714,45 +964,99 @@
 
       scrollToBottom();
 
-      setTimeout(() => {
-        const botMessageDiv = document.createElement('div');
-        botMessageDiv.className = 'message bot';
+      const loadingDiv = document.createElement('div');
+      loadingDiv.className = 'message bot';
+      loadingDiv.innerHTML = '<span class="badge badge-tutor">AI Tutor</span><p>Đang tìm trong slide và soạn câu trả lời...</p>';
+      chatMessages.appendChild(loadingDiv);
+      scrollToBottom();
 
-        let answerText = "Mình không tìm thấy thông tin trực tiếp trong 3 Slide trên để trả lời câu hỏi này.";
-        let badgeClass = "badge-tutor";
-        let labelName = "AI Tutor";
+      if (!tutorSessionId) await initBackendSession();
+      if (!tutorSessionId) {
+        loadingDiv.innerHTML = '<span class="badge badge-test">Lỗi kết nối</span><p>Backend chưa chạy. Hãy chạy server rồi thử lại.</p>';
+        return;
+      }
 
-        if (levelKey && knowledgeBase[levelKey].answers[questionText]) {
-          answerText = knowledgeBase[levelKey].answers[questionText];
-          badgeClass = knowledgeBase[levelKey].badgeClass;
-          labelName = knowledgeBase[levelKey].label;
-        } else {
-          for (const key in knowledgeBase) {
-            if (knowledgeBase[key].answers[questionText]) {
-              answerText = knowledgeBase[key].answers[questionText];
-              badgeClass = knowledgeBase[key].badgeClass;
-              labelName = knowledgeBase[key].label;
-              break;
-            }
-          }
+      try {
+        document.getElementById('current-status-display').innerText =
+          'Trạng thái: AI đang trả lời...';
+        const response = await fetch(`${API_BASE_URL}/api/chat`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            session_id: tutorSessionId,
+            message: questionText
+          })
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error?.message || `HTTP ${response.status}`);
         }
 
-        botMessageDiv.innerHTML = `
-          <span class="badge ${badgeClass}">${labelName}</span>
-          <p>${answerText}</p>
-          <div class="suggestions-container" style="margin-top: 15px; border-top: 1px dashed #ccc; padding-top: 10px;">
-            <div class="suggestion-title">Bạn có muốn đổi mức độ khác không?</div>
-            <div>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('coban')">🌱 Cơ bản</button>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('thongthao')">🌿 Thông thạo</button>
-              <button class="btn-level-chat" style="font-size:0.8rem; padding:6px 12px;" onclick="selectLevelInChat('nangcao')">🌳 Nâng cao</button>
-            </div>
-          </div>
-        `;
+        const citationsHTML = (data.citations || []).map(item =>
+          `<button class="badge badge-tutor citation-link"
+             data-citation-document="${escapeAttribute(item.chunk_id.split('-')[0])}"
+             data-citation-page="${Number(item.page)}">
+             ${escapeHTML(item.citation)} · ${escapeHTML(item.document_title)}
+           </button>`
+        ).join(' ');
+        const suggestionsHTML = (data.suggestions || []).map(question =>
+          `<button class="btn-suggestion" data-question="${escapeAttribute(question)}">❓ ${escapeHTML(question)}</button>`
+        ).join('');
+        const answerLabel = data.answer_type === 'inference'
+          ? 'Suy luận từ nguồn'
+          : data.status === 'insufficient_source' ? 'Chưa đủ nguồn' : 'AI Tutor';
 
-        chatMessages.appendChild(botMessageDiv);
-        scrollToBottom();
-      }, 500);
+        loadingDiv.innerHTML = `
+          <span class="badge ${knowledgeBase[currentLevelKey].badgeClass}">${answerLabel}</span>
+          <p>${escapeHTML(data.answer)}</p>
+          ${citationsHTML ? `<div style="margin-top:10px;">${citationsHTML}</div>` : ''}
+          ${suggestionsHTML ? `
+            <div class="suggestions-container" style="margin-top:15px; border-top:1px dashed #ccc; padding-top:10px;">
+              <div class="suggestion-title">Câu hỏi tiếp theo phù hợp mức ${knowledgeBase[currentLevelKey].label}</div>
+              ${suggestionsHTML}
+              <button class="btn-test-action" data-start-quiz="${currentLevelKey}">
+                📝 Làm bài Test trắc nghiệm mức ${knowledgeBase[currentLevelKey].label}
+              </button>
+            </div>` : ''}
+        `;
+        loadingDiv.querySelectorAll('[data-question]').forEach(button => {
+          button.addEventListener('click', () => askQuestion(button.dataset.question));
+        });
+        loadingDiv.querySelectorAll('[data-start-quiz]').forEach(button => {
+          button.addEventListener('click', () => startQuiz(button.dataset.startQuiz));
+        });
+        loadingDiv.querySelectorAll('[data-citation-document]').forEach(button => {
+          button.addEventListener('click', () => {
+            openPdfPage(
+              button.dataset.citationDocument,
+              Number(button.dataset.citationPage)
+            );
+          });
+        });
+        document.getElementById('current-status-display').innerText =
+          `Trạng thái: ${data.model || 'AI'} · ${data.status}`;
+      } catch (error) {
+        loadingDiv.innerHTML = `
+          <span class="badge badge-test">Không thể trả lời</span>
+          <p>${escapeHTML(error.message)} Bạn có thể thử lại sau.</p>
+        `;
+        document.getElementById('current-status-display').innerText =
+          'Trạng thái: AI tạm thời lỗi';
+      }
+      scrollToBottom();
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function escapeAttribute(value) {
+      return escapeHTML(value).replaceAll('`', '&#096;');
     }
 
     function sendMessage() {
