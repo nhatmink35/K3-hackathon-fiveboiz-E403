@@ -105,7 +105,9 @@ async def suggest_questions(req: SuggestQuestionsRequest):
 
 @app.post("/api/chat")
 async def chat(req: ChatRequest):
-    context = data_loader.get_context_for_slides(req.slide_ids)
+    # A typed question may target any part of the corpus, not only the first
+    # slides used to generate suggestions. Retrieve context by the question.
+    context = data_loader.get_context_for_query(req.message)
     response = await ai_agent.chat(message=req.message, context=context, level=req.level)
 
     # Fill in badge information if it was missing from the AI response

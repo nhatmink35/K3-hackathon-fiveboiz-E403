@@ -1,7 +1,34 @@
 import os
 import glob
+import math
 import re
+import unicodedata
+from collections import Counter
 from typing import List, Dict, Any
+
+
+TOKEN_PATTERN = re.compile(r"[a-z0-9]+", re.IGNORECASE)
+STOPWORDS = {
+    "ai", "ban", "bai", "cac", "cho", "co", "cua", "duoc", "gi", "hay",
+    "khong", "la", "mot", "nao", "nhu", "nhung", "theo", "the", "trong",
+    "toi", "va", "ve",
+}
+
+
+def _normalize(text: str) -> str:
+    decomposed = unicodedata.normalize("NFD", text.lower())
+    normalized = "".join(
+        char for char in decomposed if unicodedata.category(char) != "Mn"
+    )
+    return normalized.replace("đ", "d")
+
+
+def _tokenize(text: str) -> List[str]:
+    return [
+        token
+        for token in TOKEN_PATTERN.findall(_normalize(text))
+        if len(token) > 1 and token not in STOPWORDS
+    ]
 
 
 class DataLoader:
@@ -9,8 +36,12 @@ class DataLoader:
         self.data_dir = data_dir
         self.chunks: List[Dict[str, Any]] = []
         self.slides: List[Dict[str, Any]] = []
+        self._term_frequencies: List[Counter] = []
+        self._idf: Dict[str, float] = {}
 
     def load_all(self):
+        self.chunks = []
+        self.slides = []
         files = glob.glob(os.path.join(self.data_dir, "transcript-*-clean.md"))
         slide_id_counter = 1
 
@@ -128,10 +159,27 @@ class DataLoader:
             if current_slide and current_slide["chunk_codes"]:
                 self.slides.append(current_slide)
 
+        self._build_search_index()
         print(f"[DataLoader] Loaded {len(self.chunks)} chunks, {len(self.slides)} slides from {len(files)} files")
 
-    def get_slides(self, max_slides: int = 20) -> List[Dict[str, Any]]:
-        return self.slides[:max_slides]
+    def _build_search_index(self) -> None:
+        self._term_frequencies = []
+        document_frequency: Counter = Counter()
+
+        for chunk in self.chunks:
+            searchable_text = f"{chunk['section']} {chunk['section']} {chunk['text']}"
+            frequencies = Counter(_tokenize(searchable_text))
+            self._term_frequencies.append(frequencies)
+            document_frequency.update(frequencies.keys())
+
+        corpus_size = max(len(self.chunks), 1)
+        self._idf = {
+            term: math.log(1 + (corpus_size - count + 0.5) / (count + 0.5))
+            for term, count in document_frequency.items()
+        }
+
+    def get_slides(self, max_slides: int = None) -> List[Dict[str, Any]]:
+        return self.slides[:max_slides] if max_slides else self.slides
 
     def get_context_for_slides(self, slide_ids: List[str] = None, max_chunks: int = 40) -> str:
         if not slide_ids:
@@ -153,6 +201,39 @@ class DataLoader:
             # Truncate very long chunks to save tokens
             text = c['text'][:500] if len(c['text']) > 500 else c['text']
             context_lines.append(f"[{c['code']}] ({c['section']}): {text}")
+        return "\n\n".join(context_lines)
+
+    def get_context_for_query(self, query: str, max_chunks: int = 16) -> str:
+        """Retrieve the most relevant chunks from the complete transcript corpus."""
+        query_tokens = _tokenize(query)
+        if not query_tokens:
+            return self.get_context_for_slides(max_chunks=max_chunks)
+
+        scored_chunks = []
+        for index, (chunk, frequencies) in enumerate(
+            zip(self.chunks, self._term_frequencies)
+        ):
+            score = 0.0
+            for token in query_tokens:
+                term_frequency = frequencies.get(token, 0)
+                if term_frequency:
+                    score += self._idf.get(token, 0.0) * (
+                        1.0 + math.log(term_frequency)
+                    )
+            if score > 0:
+                scored_chunks.append((score, index, chunk))
+
+        if not scored_chunks:
+            return self.get_context_for_slides(max_chunks=max_chunks)
+
+        scored_chunks.sort(key=lambda item: (-item[0], item[1]))
+        selected = scored_chunks[:max_chunks]
+        context_lines = []
+        for _, _, chunk in selected:
+            text = chunk["text"][:700]
+            context_lines.append(
+                f"[{chunk['code']}] ({chunk['section']}): {text}"
+            )
         return "\n\n".join(context_lines)
 
     def search_chunks(self, query: str) -> List[Dict[str, Any]]:
