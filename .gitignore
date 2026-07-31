@@ -3,5 +3,5 @@ node_modules/
 *.env
 __pycache__/
 *.py[cod]
-data/vlearn-pack/processed/
+data/vlearn-pack/
 eval/private-results/

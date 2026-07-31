@@ -11,7 +11,8 @@ from dotenv import load_dotenv
 from data_loader import DataLoader
 from ai_agent import AITutor
 
-load_dotenv()
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+load_dotenv(os.path.join(project_root, '.env'), encoding='utf-8-sig')
 
 # Initialize globals
 data_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'data', 'vlearn-pack', 'transcript')
@@ -27,7 +28,8 @@ async def lifespan(app: FastAPI):
     api_key = os.getenv("GEMINI_API_KEY", os.getenv("GENMINI_API_KEY", ""))
     ai_agent = AITutor(api_key=api_key)
     print(f"[Startup] Loaded {len(data_loader.chunks)} chunks, {len(data_loader.slides)} slides")
-    print(f"[Startup] AI Tutor initialized with Gemini API")
+    provider_status = "configured" if ai_agent.api_key else "not configured"
+    print(f"[Startup] AI Tutor initialized; Gemini is {provider_status}")
     yield
     # Shutdown
     print("[Shutdown] Server stopping...")
@@ -71,6 +73,18 @@ LEVEL_INFO_MAP = {
 
 
 # --- API Endpoints ---
+
+@app.get("/api/health")
+async def health():
+    return {
+        "status": "ok",
+        "ai_configured": bool(ai_agent and ai_agent.api_key),
+        "primary_model": ai_agent.primary_model_name if ai_agent else None,
+        "fallback_model": ai_agent.fallback_model_name if ai_agent else None,
+        "chunks": len(data_loader.chunks),
+        "slides": len(data_loader.slides),
+    }
+
 
 @app.get("/api/slides")
 async def get_slides():

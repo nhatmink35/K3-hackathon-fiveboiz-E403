@@ -1,6 +1,8 @@
 import os
 import json
 import asyncio
+import sys
+import urllib.request
 from typing import List, Dict, Any
 
 try:
@@ -11,6 +13,16 @@ except ImportError:
     USE_NEW_SDK = False
 
 
+def _log(message: str) -> None:
+    """Write diagnostics without crashing on legacy Windows console encodings."""
+    try:
+        print(message, flush=True)
+    except UnicodeEncodeError:
+        encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+        safe_message = message.encode(encoding, errors="replace").decode(encoding)
+        print(safe_message, flush=True)
+
+
 class AITutor:
     def __init__(self, api_key: str = None):
 
@@ -19,13 +31,15 @@ class AITutor:
 
         self.api_key = api_key
         self.fallback_api_key = os.getenv("GEMINI_FALLBACK_API_KEY", os.getenv("GEMINI_API_KEY_FALLBACK", self.api_key))
+        self.claude_api_key = os.getenv("ANTHROPIC_API_KEY", "")
+        self.claude_model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-20250514")
         
         # Read model names with typo tolerance (GENMINI_ vs GEMINI_)
         self.fallback_model_name = os.getenv("GEMINI_FALLBACK_MODEL", os.getenv("GENMINI_FALLBACK_MODEL", "gemini-3.5-flash-lite"))
         if self.fallback_model_name.startswith("genmini"):
             self.fallback_model_name = self.fallback_model_name.replace("genmini", "gemini")
 
-        self.primary_model_name = os.getenv("GEMINI_PRIMARY_MODEL", "gemini-3.5-flash")
+        self.primary_model_name = os.getenv("GEMINI_PRIMARY_MODEL", os.getenv("GEMINI_MODEL", "gemini-3.5-flash"))
         if self.primary_model_name.startswith("genmini"):
             self.primary_model_name = self.primary_model_name.replace("genmini", "gemini")
 
@@ -71,10 +85,10 @@ class AITutor:
         # If Claude API Key is present, try Claude first!
         if self.claude_api_key:
             try:
-                print(f"[AITutor] 🤖 Calling Claude API ({self.claude_model})...")
+                _log(f"[AITutor] Calling Claude API ({self.claude_model})...")
                 return await self._call_claude(prompt)
             except Exception as claude_err:
-                print(f"[AITutor] ⚠️ Claude API error: {claude_err}. Falling back to Gemini...")
+                _log(f"[AITutor] Claude API error: {claude_err}. Falling back to Gemini...")
 
         # Try Primary Gemini Model & Alternatives
         models_to_try = [
@@ -109,15 +123,15 @@ class AITutor:
             except Exception as err:
                 last_exception = err
                 err_str = str(err)
-                print(f"[AITutor] Model '{model_name}' error: {err_str[:120]}")
+                _log(f"[AITutor] Model '{model_name}' error: {err_str[:120]}")
                 if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "Quota" in err_str:
-                    print("[AITutor] ⏳ Rate limit hit (5 RPM limit). Waiting 1.5s before fallback...")
+                    _log("[AITutor] Rate limit hit. Waiting 1.5s before fallback...")
                     await asyncio.sleep(1.5)
                 continue
 
         # Fallback to secondary API Key if available
         if self.fallback_api_key and self.fallback_api_key != self.api_key and USE_NEW_SDK and self.fallback_client:
-            print(f"[AITutor] 🔄 Switching to Secondary Gemini Key...")
+            _log("[AITutor] Switching to secondary Gemini key...")
             try:
                 response = self.fallback_client.models.generate_content(
                     model=self.fallback_model_name,
@@ -125,7 +139,7 @@ class AITutor:
                 )
                 return response.text
             except Exception as fb_err:
-                print(f"[AITutor] Secondary Key error: {fb_err}")
+                _log(f"[AITutor] Secondary key error: {fb_err}")
 
         raise last_exception or RuntimeError("All LLM providers (Claude & Gemini) failed")
 
@@ -198,7 +212,7 @@ Trả về JSON (KHÔNG thêm text ngoài JSON):
             return result
         except Exception as e:
             err_str = str(e)
-            print(f"[AITutor] Chat error: {err_str}")
+            _log(f"[AITutor] Chat error: {err_str}")
             
             # Smart Offline RAG Fallback when Quota 429 is hit
             if "429" in err_str or "RESOURCE_EXHAUSTED" in err_str or "Quota" in err_str:
@@ -238,7 +252,7 @@ Trả về JSON array (KHÔNG thêm text ngoài JSON):
                 return result[:5]
             return ["Không thể tạo câu hỏi gợi ý. Vui lòng thử lại."]
         except Exception as e:
-            print(f"[AITutor] Suggest error: {e}")
+            _log(f"[AITutor] Suggest error: {e}")
             return [
                 "Kỹ năng xác định bài toán từ yêu cầu mơ hồ là gì?",
                 "Product manager khác project manager như thế nào?",
@@ -262,7 +276,7 @@ Trả về JSON (KHÔNG thêm text ngoài JSON):
             result = self._parse_json(text)
             return result
         except Exception as e:
-            print(f"[AITutor] Quiz error: {e}")
+            _log(f"[AITutor] Quiz error: {e}")
             return {
                 "question": "Theo nội dung bài giảng, kỹ năng nào được đánh giá là quan trọng nhất khi đưa AI vào doanh nghiệp?",
                 "options": [
